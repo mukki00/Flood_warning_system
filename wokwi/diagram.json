@@ -1,0 +1,136 @@
+{
+  "version": 1,
+  "author": "MSc AI - Flood Early Warning System",
+  "editor": "wokwi",
+  "parts": [
+    {
+      "type": "wokwi-esp32-devkit-v1",
+      "id": "esp",
+      "top": 220,
+      "left": 340,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-lcd1602",
+      "id": "lcd1",
+      "top": 20,
+      "left": 60,
+      "attrs": { "pins": "i2c" }
+    },
+    {
+      "type": "wokwi-hc-sr04",
+      "id": "ultrasonic1",
+      "top": 20,
+      "left": 540,
+      "attrs": { "label": "Water Level Sensor" }
+    },
+    {
+      "type": "wokwi-dht22",
+      "id": "dht1",
+      "top": 160,
+      "left": 580,
+      "attrs": { "label": "Temp/Humidity" }
+    },
+    {
+      "type": "wokwi-potentiometer",
+      "id": "rain1",
+      "top": 500,
+      "left": 60,
+      "attrs": { "label": "Rain Sensor (Simulated)", "value": "0.3" }
+    },
+    {
+      "type": "wokwi-potentiometer",
+      "id": "soil1",
+      "top": 600,
+      "left": 60,
+      "attrs": { "label": "Soil Moisture (Simulated)", "value": "0.3" }
+    },
+    {
+      "type": "wokwi-resistor",
+      "id": "r1",
+      "top": 362,
+      "left": 644,
+      "attrs": { "value": "220", "rotate": "90" }
+    },
+    {
+      "type": "wokwi-led",
+      "id": "ledGreen",
+      "top": 340,
+      "left": 700,
+      "attrs": { "color": "green", "label": "LOW RISK" }
+    },
+    {
+      "type": "wokwi-resistor",
+      "id": "r2",
+      "top": 432,
+      "left": 644,
+      "attrs": { "value": "220", "rotate": "90" }
+    },
+    {
+      "type": "wokwi-led",
+      "id": "ledYellow",
+      "top": 410,
+      "left": 700,
+      "attrs": { "color": "yellow", "label": "MODERATE RISK" }
+    },
+    {
+      "type": "wokwi-resistor",
+      "id": "r3",
+      "top": 502,
+      "left": 644,
+      "attrs": { "value": "220", "rotate": "90" }
+    },
+    {
+      "type": "wokwi-led",
+      "id": "ledRed",
+      "top": 480,
+      "left": 700,
+      "attrs": { "color": "red", "label": "HIGH RISK" }
+    },
+    {
+      "type": "wokwi-buzzer",
+      "id": "buzzer1",
+      "top": 570,
+      "left": 670,
+      "attrs": { "label": "Flood Alarm" }
+    }
+  ],
+  "connections": [
+    ["esp:3V3",   "ultrasonic1:VCC",  "red",    []],
+    ["esp:GND.1", "ultrasonic1:GND",  "black",  []],
+    ["esp:D5",    "ultrasonic1:TRIG", "green",  []],
+    ["esp:D18",   "ultrasonic1:ECHO", "blue",   []],
+
+    ["esp:3V3",   "dht1:VCC",  "red",   []],
+    ["esp:GND.1", "dht1:GND",  "black", []],
+    ["esp:D4",    "dht1:SDA",  "green", []],
+
+    ["esp:3V3",   "rain1:VCC", "red",    []],
+    ["esp:GND.2", "rain1:GND", "black",  []],
+    ["esp:D34",   "rain1:SIG", "orange", []],
+
+    ["esp:3V3",   "soil1:VCC", "red",    []],
+    ["esp:GND.2", "soil1:GND", "black",  []],
+    ["esp:D35",   "soil1:SIG", "orange", []],
+
+    ["esp:D26",       "r1:1",        "green",  []],
+    ["r1:2",          "ledGreen:A",  "green",  []],
+    ["ledGreen:C",    "esp:GND.3",   "black",  []],
+
+    ["esp:D27",       "r2:1",        "yellow", []],
+    ["r2:2",          "ledYellow:A", "yellow", []],
+    ["ledYellow:C",   "esp:GND.3",   "black",  []],
+
+    ["esp:D14",       "r3:1",        "red",    []],
+    ["r3:2",          "ledRed:A",    "red",    []],
+    ["ledRed:C",      "esp:GND.3",   "black",  []],
+
+    ["esp:D12",    "buzzer1:1",  "purple", []],
+    ["buzzer1:2",  "esp:GND.4",  "black",  []],
+
+    ["esp:3V3",   "lcd1:VCC",  "red",    []],
+    ["esp:GND.1", "lcd1:GND",  "black",  []],
+    ["esp:D21",   "lcd1:SDA",  "blue",   []],
+    ["esp:D22",   "lcd1:SCL",  "yellow", []]
+  ]
+}
