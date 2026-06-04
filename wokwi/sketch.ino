@@ -34,7 +34,7 @@ const char* WIFI_SSID     = "Wokwi-GUEST";
 const char* WIFI_PASSWORD = "";
 
 // ─── Flask API endpoint (update IP for your local machine in deployment) ───
-const char* FLASK_API_URL = "http://192.168.1.100:5000/api/sensor-data";
+const char* FLASK_API_URL = "http://192.168.8.105:5000/api/sensor-data";
 
 // ─── MQTT Broker (HiveMQ public broker – works in Wokwi simulation) ────────
 const char* MQTT_BROKER        = "broker.hivemq.com";
@@ -75,6 +75,10 @@ const char* MQTT_CLIENT_PREFIX = "ESP32FloodNode1-";
 // Temperature as an additional risk amplifier
 #define TEMP_HIGH_C        35.0
 
+// Humidity as a risk amplifier (high humidity = reduced evaporation = more runoff)
+#define HUMIDITY_HIGH_PCT   95.0   // > 95%  → +2 pts
+#define HUMIDITY_MOD_PCT    85.0   // > 85%  → +1 pt
+
 // Risk scoring thresholds
 #define SCORE_HIGH_RISK    5
 #define SCORE_MOD_RISK     2
@@ -108,23 +112,27 @@ float readWaterLevelCm() {
 
 // ─── Risk Evaluation ─────────────────────────────────────────────────────────
 
-RiskLevel evaluateFloodRisk(float waterCm, int rain, int soil, float temp) {
+RiskLevel evaluateFloodRisk(float waterCm, int rain, int soil, float temp, float humidity) {
   int score = 0;
 
   // Water level (highest weight)
-  if (waterCm < WATER_HIGH_CM)        score += 3;
+  if (waterCm < WATER_HIGH_CM)          score += 3;
   else if (waterCm < WATER_MODERATE_CM) score += 1;
 
   // Rainfall
-  if (rain > RAIN_HIGH_ADC)           score += 3;
-  else if (rain > RAIN_MODERATE_ADC)  score += 1;
+  if (rain > RAIN_HIGH_ADC)             score += 3;
+  else if (rain > RAIN_MODERATE_ADC)    score += 1;
 
   // Soil saturation
-  if (soil > SOIL_HIGH_ADC)           score += 2;
-  else if (soil > SOIL_MODERATE_ADC)  score += 1;
+  if (soil > SOIL_HIGH_ADC)             score += 2;
+  else if (soil > SOIL_MODERATE_ADC)    score += 1;
 
   // Temperature (minor amplifier)
-  if (temp > TEMP_HIGH_C)             score += 1;
+  if (temp > TEMP_HIGH_C)               score += 1;
+
+  // Humidity (reduced evaporation increases runoff risk)
+  if (humidity > HUMIDITY_HIGH_PCT)     score += 2;
+  else if (humidity > HUMIDITY_MOD_PCT) score += 1;
 
   if (score >= SCORE_HIGH_RISK) return RISK_HIGH;
   if (score >= SCORE_MOD_RISK)  return RISK_MODERATE;
@@ -356,7 +364,7 @@ void loop() {
     if (isnan(humidity)) humidity = -1.0;
 
     // ── Evaluate flood risk ──
-    RiskLevel risk = evaluateFloodRisk(waterCm, rainRaw, soilRaw, tempC);
+    RiskLevel risk = evaluateFloodRisk(waterCm, rainRaw, soilRaw, tempC, humidity);
 
     // ── Drive actuators ──
     setAlertIndicators(risk);

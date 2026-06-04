@@ -1,0 +1,15 @@
+# Environment secrets — never commit
+flask_api/.env
+.env
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+
+# PlatformIO build output
+wokwi/.pio/
+
+# VS Code
+.vscode/
