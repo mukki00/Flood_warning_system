@@ -13,3 +13,8 @@ wokwi/.pio/
 
 # VS Code
 .vscode/
+
+# React dashboard — dependencies and build output
+dashboard/node_modules/
+dashboard/dist/
+dashboard/.vite/

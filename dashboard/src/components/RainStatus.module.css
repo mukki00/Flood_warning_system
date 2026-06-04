@@ -1,0 +1,57 @@
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+.valueRow {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+  margin-top: 4px;
+}
+.value {
+  font-size: 2.4rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+.unit {
+  font-size: 1rem;
+  color: var(--text-secondary);
+}
+.categoryRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 8px;
+}
+.barsWrapper {
+  display: flex;
+  align-items: flex-end;
+  gap: 4px;
+  height: 36px;
+}
+.bar {
+  width: 8px;
+  border-radius: 3px 3px 0 0;
+  transition: background 0.3s;
+}
+.category {
+  font-size: 0.88rem;
+  font-weight: 700;
+}
