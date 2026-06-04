@@ -1,10 +1,11 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useSensorData } from './hooks/useSensorData'
 import SensorCard     from './components/SensorCard'
 import RiskIndicator  from './components/RiskIndicator'
 import SensorChart    from './components/SensorChart'
 import AlertList      from './components/AlertList'
 import RainStatus     from './components/RainStatus'
+import TimeFilter     from './components/TimeFilter'
 import styles         from './App.module.css'
 
 // ── Inline SVG icons (no external dep) ───────────────────────────────────────
@@ -40,7 +41,8 @@ function formatDate(d) {
 }
 
 export default function App() {
-  const { latest, history, alerts, status, error, loading, lastUpdated, refresh } = useSensorData()
+  const [filterKey, setFilterKey] = useState('live')
+  const { latest, history, alerts, status, error, loading, lastUpdated, refresh } = useSensorData(filterKey)
 
   const temp     = latest?.temperature_c   ?? null
   const humidity = latest?.humidity_pct    ?? null
@@ -141,36 +143,46 @@ export default function App() {
         </section>
 
         {/* ── Historical Charts ────────────────────────────── */}
-        <section className={styles.chartsGrid}>
-          <SensorChart
-            title="Temperature History (°C)"
-            data={history}
-            dataKey="temperature_c"
-            unit="°C"
-            color={tempColor}
-          />
-          <SensorChart
-            title="Humidity History (%)"
-            data={history}
-            dataKey="humidity_pct"
-            unit="%"
-            color="#79c0ff"
-          />
-          <SensorChart
-            title="Water Level History (cm)"
-            data={history}
-            dataKey="water_level_cm"
-            unit="cm"
-            color={waterColor}
-          />
-          <SensorChart
-            title="Rain Sensor (ADC Raw)"
-            data={history}
-            dataKey="rain_raw"
-            unit=""
-            color="#bc8cff"
-            type="line"
-          />
+        <section className={styles.chartsSection}>
+          <div className={styles.chartsHeader}>
+            <span className={styles.chartsTitle}>Historical Charts</span>
+            <TimeFilter active={filterKey} onChange={setFilterKey} />
+          </div>
+          <div className={styles.chartsGrid}>
+            <SensorChart
+              title="Temperature History (°C)"
+              data={history}
+              dataKey="temperature_c"
+              unit="°C"
+              color={tempColor}
+              filterKey={filterKey}
+            />
+            <SensorChart
+              title="Humidity History (%)"
+              data={history}
+              dataKey="humidity_pct"
+              unit="%"
+              color="#79c0ff"
+              filterKey={filterKey}
+            />
+            <SensorChart
+              title="Water Level History (cm)"
+              data={history}
+              dataKey="water_level_cm"
+              unit="cm"
+              color={waterColor}
+              filterKey={filterKey}
+            />
+            <SensorChart
+              title="Rain Sensor (ADC Raw)"
+              data={history}
+              dataKey="rain_raw"
+              unit=""
+              color="#bc8cff"
+              type="line"
+              filterKey={filterKey}
+            />
+          </div>
         </section>
 
         {/* ── Alerts ──────────────────────────────────────── */}

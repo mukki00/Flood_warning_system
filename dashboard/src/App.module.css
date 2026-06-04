@@ -134,6 +134,31 @@
   gap: 16px;
 }
 
+/* ── Charts section ──────────────────────────────────────── */
+.chartsSection {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.chartsHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 12px 20px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+}
+.chartsTitle {
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-secondary);
+}
+
 /* ── Charts grid ─────────────────────────────────────────── */
 .chartsGrid {
   display: grid;

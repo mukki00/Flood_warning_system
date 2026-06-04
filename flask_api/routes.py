@@ -14,7 +14,7 @@ Endpoints:
 from datetime import datetime, timezone
 from flask import Blueprint, request, jsonify
 from store import data_store
-from azure_cosmos_client import save_reading
+from azure_cosmos_client import save_reading, query_readings_by_range
 from azure_eventhub_client import send_event
 
 api = Blueprint("api", __name__, url_prefix="/api")
@@ -89,9 +89,48 @@ def ingest_sensor_data():
 
 @api.route("/sensor-data", methods=["GET"])
 def get_all_readings():
-    limit = request.args.get("limit", default=100, type=int)
+    from_ts = request.args.get("from")
+    to_ts   = request.args.get("to")
+    limit   = request.args.get("limit", default=100, type=int)
+
+    # Date-range query → fetch from Cosmos DB
+    if from_ts:
+        if not to_ts:
+            to_ts = datetime.now(timezone.utc).isoformat()
+        readings = query_readings_by_range(from_ts, to_ts, limit=min(limit, 5000))
+        if readings:
+            return jsonify({"count": len(readings), "readings": readings,
+                            "source": "cosmos", "from": from_ts, "to": to_ts}), 200
+        # Fall back to in-memory if Cosmos is not configured
+        readings = data_store.get_all()
+        from_dt  = _parse_iso(from_ts)
+        to_dt    = _parse_iso(to_ts)
+        if from_dt:
+            readings = [r for r in readings if _reading_in_range(r, from_dt, to_dt)]
+        return jsonify({"count": len(readings), "readings": readings,
+                        "source": "memory", "from": from_ts, "to": to_ts}), 200
+
+    # Default: return last N from in-memory store
     readings = data_store.get_all()[-limit:]
     return jsonify({"count": len(readings), "readings": readings}), 200
+
+
+def _parse_iso(ts: str):
+    if not ts:
+        return None
+    try:
+        return datetime.fromisoformat(ts)
+    except ValueError:
+        return None
+
+
+def _reading_in_range(reading: dict, from_dt, to_dt) -> bool:
+    ts = _parse_iso(reading.get("received_at", ""))
+    if ts is None:
+        return False
+    if ts.tzinfo is None:
+        ts = ts.replace(tzinfo=timezone.utc)
+    return from_dt <= ts <= to_dt
 
 
 @api.route("/sensor-data/latest", methods=["GET"])

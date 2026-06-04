@@ -105,5 +105,36 @@ def query_latest(node_id: str, limit: int = 10) -> list:
         return []
 
 
+def query_readings_by_range(from_ts: str, to_ts: str, limit: int = 2000) -> list:
+    """
+    Query readings between two ISO-8601 timestamps (inclusive) from Cosmos DB.
+    `from_ts` and `to_ts` are ISO strings, e.g. '2026-05-28T00:00:00+00:00'.
+    Returns documents ordered by received_at ascending.
+    """
+    if _container is None:
+        return []
+
+    try:
+        query = (
+            "SELECT TOP @limit * FROM c "
+            "WHERE c.received_at >= @from_ts AND c.received_at <= @to_ts "
+            "ORDER BY c.received_at ASC"
+        )
+        params = [
+            {"name": "@limit",   "value": limit},
+            {"name": "@from_ts", "value": from_ts},
+            {"name": "@to_ts",   "value": to_ts},
+        ]
+        items = list(_container.query_items(
+            query=query,
+            parameters=params,
+            enable_cross_partition_query=True,
+        ))
+        return items
+    except Exception as exc:
+        logger.error("[Cosmos] Range query failed: %s", exc)
+        return []
+
+
 # Initialise on import
 _init_cosmos()

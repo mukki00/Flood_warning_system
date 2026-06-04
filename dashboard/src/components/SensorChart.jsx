@@ -5,11 +5,32 @@ import {
 } from 'recharts'
 import styles from './SensorChart.module.css'
 
-function formatTime(ts) {
+// Format timestamp label based on active filter period
+function formatLabel(ts, filterKey) {
   if (!ts) return ''
   const d = new Date(ts)
-  return `${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}:${String(d.getSeconds()).padStart(2,'0')}`
+  if (filterKey === 'live' || filterKey === '1h') {
+    return `${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}:${String(d.getSeconds()).padStart(2,'0')}`
+  }
+  if (filterKey === '24h') {
+    return `${String(d.getMonth()+1).padStart(2,'0')}/${String(d.getDate()).padStart(2,'0')} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`
+  }
+  // 7d, 30d, 1y
+  return `${String(d.getMonth()+1).padStart(2,'0')}/${String(d.getDate()).padStart(2,'0')}`
 }
+
+// Downsample array to at most `maxPoints` evenly-spaced entries
+function downsample(arr, maxPoints) {
+  if (arr.length <= maxPoints) return arr
+  const step = arr.length / maxPoints
+  const result = []
+  for (let i = 0; i < maxPoints; i++) {
+    result.push(arr[Math.round(i * step)])
+  }
+  return result
+}
+
+const MAX_CHART_POINTS = 120
 
 const CustomTooltip = ({ active, payload, label, unit }) => {
   if (active && payload && payload.length) {
@@ -27,16 +48,19 @@ const CustomTooltip = ({ active, payload, label, unit }) => {
 
 /**
  * Props:
- *   title   – chart heading
- *   data    – array of reading objects
- *   dataKey – field name in the reading objects
- *   unit    – display unit
- *   color   – stroke color
- *   type    – 'area' | 'line'  (default: 'area')
+ *   title     – chart heading
+ *   data      – array of reading objects
+ *   dataKey   – field name in the reading objects
+ *   unit      – display unit
+ *   color     – stroke color
+ *   type      – 'area' | 'line'  (default: 'area')
+ *   filterKey – active TIME_FILTERS key for axis formatting
  */
-export default function SensorChart({ title, data, dataKey, unit, color = '#58a6ff', type = 'area' }) {
-  const chartData = data.map((r) => ({
-    time:  formatTime(r.received_at),
+export default function SensorChart({ title, data, dataKey, unit, color = '#58a6ff', type = 'area', filterKey = 'live' }) {
+  const sampled = downsample(data, MAX_CHART_POINTS)
+
+  const chartData = sampled.map((r) => ({
+    time:  formatLabel(r.received_at, filterKey),
     value: r[dataKey] !== undefined ? Number(r[dataKey]) : null,
   }))
 
