@@ -14,8 +14,9 @@ Endpoints:
 from datetime import datetime, timezone
 from flask import Blueprint, request, jsonify
 from store import data_store
-from azure_cosmos_client import save_reading, query_readings_by_range
-from azure_eventhub_client import send_event
+from azure_cosmos_client import query_readings_by_range
+from offline_store import offline_store
+from cloud_sync import sync_reading_to_cloud, active_targets
 
 api = Blueprint("api", __name__, url_prefix="/api")
 
@@ -64,13 +65,15 @@ def ingest_sensor_data():
     data["received_at"] = datetime.now(timezone.utc).isoformat()
     data["source"] = "http"
 
+    # Always store locally first (in-memory + Redis cache)
     data_store.add_reading(data)
+    offline_store.cache_reading(data)
 
-    # ── Persist to Azure Cosmos DB ──
-    save_reading(data)
-
-    # ── Forward to Azure Event Hub → Stream Analytics ──
-    send_event(data)
+    # Best-effort immediate cloud sync; queue for retry on failure
+    cloud_synced = sync_reading_to_cloud(data)
+    queued_for_sync = False
+    if not cloud_synced:
+        queued_for_sync = offline_store.enqueue_sync_reading(data)
 
     # Auto-generate an alert record for HIGH/MODERATE risk
     if data["risk_level"] in ("HIGH", "MODERATE"):
@@ -81,8 +84,14 @@ def ingest_sensor_data():
             "source":      "http",
         }
         data_store.add_alert(alert)
+        offline_store.cache_alert(alert)
 
-    return jsonify({"status": "ok", "received_at": data["received_at"]}), 201
+    return jsonify({
+        "status": "ok",
+        "received_at": data["received_at"],
+        "cloud_synced": cloud_synced,
+        "queued_for_sync": queued_for_sync,
+    }), 201
 
 
 # ── Query readings ─────────────────────────────────────────────────────────────
@@ -97,6 +106,13 @@ def get_all_readings():
     if from_ts:
         if not to_ts:
             to_ts = datetime.now(timezone.utc).isoformat()
+
+        # Local-first: Redis cache → cloud → in-memory
+        readings = offline_store.get_readings_by_range(from_ts, to_ts, limit=min(limit, 5000))
+        if readings:
+            return jsonify({"count": len(readings), "readings": readings,
+                            "source": "redis", "from": from_ts, "to": to_ts}), 200
+
         readings = query_readings_by_range(from_ts, to_ts, limit=min(limit, 5000))
         if readings:
             return jsonify({"count": len(readings), "readings": readings,
@@ -111,15 +127,19 @@ def get_all_readings():
                         "source": "memory", "from": from_ts, "to": to_ts}), 200
 
     # Default: return last N from in-memory store
+    readings = offline_store.get_recent_readings(limit=limit)
+    if readings:
+        return jsonify({"count": len(readings), "readings": readings, "source": "redis"}), 200
+
     readings = data_store.get_all()[-limit:]
-    return jsonify({"count": len(readings), "readings": readings}), 200
+    return jsonify({"count": len(readings), "readings": readings, "source": "memory"}), 200
 
 
 def _parse_iso(ts: str):
     if not ts:
         return None
     try:
-        return datetime.fromisoformat(ts)
+        return datetime.fromisoformat(ts.replace("Z", "+00:00"))
     except ValueError:
         return None
 
@@ -135,7 +155,7 @@ def _reading_in_range(reading: dict, from_dt, to_dt) -> bool:
 
 @api.route("/sensor-data/latest", methods=["GET"])
 def get_latest_reading():
-    latest = data_store.get_latest()
+    latest = offline_store.get_latest_reading() or data_store.get_latest()
     if latest is None:
         return jsonify({"error": "No data received yet"}), 404
     return jsonify(latest), 200
@@ -143,10 +163,12 @@ def get_latest_reading():
 
 @api.route("/sensor-data/<string:node_id>", methods=["GET"])
 def get_readings_by_node(node_id: str):
-    readings = data_store.get_by_node(node_id)
+    limit = request.args.get("limit", default=100, type=int)
+    readings = offline_store.get_readings_by_node(node_id, limit=max(limit, 100))
+    if not readings:
+        readings = data_store.get_by_node(node_id)
     if not readings:
         return jsonify({"error": f"No data for node '{node_id}'"}), 404
-    limit = request.args.get("limit", default=100, type=int)
     return jsonify({"node_id": node_id,
                     "count": len(readings[-limit:]),
                     "readings": readings[-limit:]}), 200
@@ -156,13 +178,17 @@ def get_readings_by_node(node_id: str):
 
 @api.route("/alerts", methods=["GET"])
 def get_alerts():
-    alerts = data_store.get_alerts()
-    return jsonify({"count": len(alerts), "alerts": alerts}), 200
+    alerts = offline_store.get_alerts(limit=200)
+    source = "redis"
+    if not alerts:
+        alerts = data_store.get_alerts()
+        source = "memory"
+    return jsonify({"count": len(alerts), "alerts": alerts, "source": source}), 200
 
 
 @api.route("/alerts/latest", methods=["GET"])
 def get_latest_alert():
-    alert = data_store.get_latest_alert()
+    alert = offline_store.get_latest_alert() or data_store.get_latest_alert()
     if alert is None:
         return jsonify({"error": "No alerts yet"}), 404
     return jsonify(alert), 200
@@ -175,4 +201,19 @@ def get_status():
     summary = data_store.summary()
     summary["server_time"] = datetime.now(timezone.utc).isoformat()
     summary["status"] = "ok"
+    summary["storage"] = {
+        "redis_available": offline_store.is_available(),
+        "sync_queue_pending": offline_store.sync_queue_length(),
+    }
+    summary["cloud_targets"] = active_targets()
+
+    # Derive current risk from the latest live reading (not from alerts).
+    # latest_alert is a historical event; current_risk reflects the live sensor state.
+    latest = offline_store.get_latest_reading() or data_store.get_latest()
+    summary["current_risk"] = latest.get("risk_level", "UNKNOWN") if latest else "UNKNOWN"
+    summary["alert_note"] = (
+        "latest_alert shows the most recent triggered alert (historical). "
+        "current_risk reflects the live sensor state."
+    )
+
     return jsonify(summary), 200

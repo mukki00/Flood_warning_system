@@ -14,6 +14,10 @@ logger = logging.getLogger(__name__)
 _producer = None
 
 
+def is_ready() -> bool:
+    return _producer is not None
+
+
 def _init_eventhub():
     global _producer
 

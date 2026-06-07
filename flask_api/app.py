@@ -13,6 +13,8 @@ from flask_cors import CORS
 from config import Config
 from routes import api
 from mqtt_client import start_mqtt_client
+from cloud_sync import sync_reading_to_cloud
+from sync_worker import start_sync_worker
 
 logging.basicConfig(
     level=logging.INFO,
@@ -39,6 +41,9 @@ if __name__ == "__main__":
 
     # Start MQTT subscriber in background thread
     start_mqtt_client()
+
+    # Start retry worker that drains Redis sync queue when cloud is reachable
+    start_sync_worker(sync_reading_to_cloud)
 
     logger.info("Starting Flask API on %s:%d", Config.HOST, Config.PORT)
     app.run(host=Config.HOST, port=Config.PORT, debug=Config.DEBUG, use_reloader=False)

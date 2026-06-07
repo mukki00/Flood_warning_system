@@ -27,6 +27,10 @@ _cosmos_client = None
 _container     = None
 
 
+def is_ready() -> bool:
+    return _container is not None
+
+
 def _init_cosmos():
     global _cosmos_client, _container
 

@@ -36,3 +36,23 @@ class Config:
     # ── Azure Event Hub (feeds Stream Analytics) ───────────────────────────
     EVENTHUB_CONN_STR = os.getenv("EVENTHUB_CONN_STR", "")  # full connection string
     EVENTHUB_NAME     = os.getenv("EVENTHUB_NAME",     "flood-events")
+
+    # ── Redis local-first cache / offline queue ───────────────────────────
+    REDIS_URL         = os.getenv("REDIS_URL", "")
+    REDIS_HOST        = os.getenv("REDIS_HOST", "127.0.0.1")
+    REDIS_PORT        = int(os.getenv("REDIS_PORT", "6379"))
+    REDIS_DB          = int(os.getenv("REDIS_DB", "0"))
+    REDIS_PASSWORD    = os.getenv("REDIS_PASSWORD", "")
+    REDIS_SSL         = os.getenv("REDIS_SSL", "false").lower() == "true"
+
+    REDIS_KEY_READINGS   = os.getenv("REDIS_KEY_READINGS", "flood:readings")
+    REDIS_KEY_ALERTS     = os.getenv("REDIS_KEY_ALERTS", "flood:alerts")
+    REDIS_KEY_SYNC_QUEUE = os.getenv("REDIS_KEY_SYNC_QUEUE", "flood:sync:readings")
+    ALERTS_MAX_RECORDS   = int(os.getenv("ALERTS_MAX_RECORDS", "200"))
+
+    # ── Cloud sync controls (for hybrid/offline mode) ─────────────────────
+    SYNC_TO_COSMOS        = os.getenv("SYNC_TO_COSMOS", "true").lower() == "true"
+    SYNC_TO_EVENTHUB      = os.getenv("SYNC_TO_EVENTHUB", "true").lower() == "true"
+    ENABLE_BACKGROUND_SYNC = os.getenv("ENABLE_BACKGROUND_SYNC", "true").lower() == "true"
+    SYNC_BATCH_SIZE       = int(os.getenv("SYNC_BATCH_SIZE", "50"))
+    SYNC_INTERVAL_SECONDS = float(os.getenv("SYNC_INTERVAL_SECONDS", "5"))

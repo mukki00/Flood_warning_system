@@ -4,3 +4,4 @@ paho-mqtt==2.1.0
 python-dotenv==1.1.0
 azure-cosmos==4.9.0
 azure-eventhub==5.12.2
+redis==5.2.1

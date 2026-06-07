@@ -12,8 +12,8 @@ import paho.mqtt.client as mqtt
 
 from config import Config
 from store import data_store
-from azure_cosmos_client import save_reading
-from azure_eventhub_client import send_event
+from offline_store import offline_store
+from cloud_sync import sync_reading_to_cloud
 
 logger = logging.getLogger(__name__)
 
@@ -37,11 +37,16 @@ def _on_message(client, userdata, msg):
 
         if msg.topic == Config.MQTT_TOPIC_ALERTS:
             data_store.add_alert(payload)
+            offline_store.cache_alert(payload)
             logger.info("[MQTT] Alert received: %s", payload)
         else:
+            # Always store locally first.
             data_store.add_reading(payload)
-            save_reading(payload)
-            send_event(payload)
+            offline_store.cache_reading(payload)
+
+            if not sync_reading_to_cloud(payload):
+                offline_store.enqueue_sync_reading(payload)
+
             logger.info("[MQTT] Sensor data received from %s",
                         payload.get("node_id", "unknown"))
     except (json.JSONDecodeError, Exception) as exc:
