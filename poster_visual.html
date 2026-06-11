@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<title>Flood Warning System Poster – CS7080</title>
+<style>
+@page { size: A1 landscape; margin: 8mm; }
+*     { box-sizing:border-box; margin:0; padding:0; }
+body  {
+  font-family:'Segoe UI',Arial,sans-serif; font-size:9pt;
+  background:#fff; color:#111;
+  width:821mm; min-height:574mm; padding:5mm 7mm;
+}
+
+/* ── Header ─────────────────────────────── */
+.hdr          { text-align:center; margin-bottom:4mm; }
+.hdr .tag     { font-size:10.5pt; font-weight:600; color:#555; letter-spacing:1px; text-transform:uppercase; }
+.hdr h1       { font-size:17pt; font-weight:900; color:#0a1628; border:2.5px solid #0a1628;
+                display:inline-block; padding:4px 18px; margin:3px 0; }
+.hdr .auth    { font-size:11pt; font-weight:700; color:#c8000a; margin-top:2px; }
+
+/* ── Grid ────────────────────────────────── */
+.grid {
+  display:grid;
+  grid-template-columns: 152mm 162mm 140mm 172mm 157mm;
+  gap:3.5mm;
+}
+
+/* ── Card ────────────────────────────────── */
+.card         { border:1.5px solid #222; padding:5px 7px; background:#fff; }
+.card h2      { font-size:9.5pt; font-weight:800; text-align:center;
+                background:#0a1628; color:#fff; padding:3px 0;
+                margin:-5px -7px 5px; text-transform:uppercase; letter-spacing:.5px; }
+.card h3      { font-size:8.5pt; font-weight:700; color:#0a1628; margin:6px 0 2px;
+                border-bottom:1px solid #ccc; padding-bottom:2px; }
+.card p,.card li { font-size:8pt; line-height:1.45; margin-bottom:2px; }
+.card ul      { padding-left:13px; }
+
+/* ── Pin table ───────────────────────────── */
+.pt           { width:100%; border-collapse:collapse; font-size:7.5pt; margin-top:3px; }
+.pt th        { background:#0a1628; color:#fff; padding:2px 4px; text-align:left; }
+.pt td        { padding:2px 4px; border-bottom:1px solid #ddd; }
+.pt tr:nth-child(even) td { background:#f4f6fa; }
+
+/* ── Risk badges ─────────────────────────── */
+.bl,.bm,.bh   { display:inline-block; border-radius:3px; padding:1px 5px;
+                font-size:7.5pt; font-weight:700; color:#fff; margin-right:3px; }
+.bl  { background:#28a745; }
+.bm  { background:#d29922; }
+.bh  { background:#c8000a; }
+
+/* ── Divider ─────────────────────────────── */
+hr   { border:none; border-top:1px solid #ddd; margin:4px 0; }
+
+/* ── Alert items ─────────────────────────── */
+.ai      { background:#fff3cd; border-left:3px solid #d29922;
+           padding:2px 5px; margin-bottom:2px; font-size:7.5pt;
+           border-radius:0 3px 3px 0; }
+.ai.hi   { background:#f8d7da; border-color:#c8000a; }
+
+/* ── Dark dashboard mockup ───────────────── */
+.dmock   { background:#0d1117; border-radius:4px; padding:5px 7px;
+           color:#e6edf3; font-size:7.5pt; font-family:Consolas,monospace; margin-top:4px; }
+.dtitle  { color:#58a6ff; font-weight:700; font-size:8pt; }
+.drow    { display:flex; gap:4px; margin-top:3px; }
+.dc      { background:#161b22; border:1px solid #30363d; border-radius:3px;
+           padding:4px 5px; flex:1; text-align:center; }
+.dc .lbl { color:#8b949e; font-size:6.5pt; }
+.dc .val { font-size:9pt; font-weight:700; margin:2px 0; }
+.val.r   { color:#f85149; }
+.val.a   { color:#d29922; }
+.val.g   { color:#3fb950; }
+.val.b   { color:#58a6ff; }
+.drisk   { margin-top:3px; border-radius:3px; padding:3px; font-weight:700;
+           text-align:center; font-size:8pt; color:#fff; }
+.drisk.h { background:#f85149; }
+.drisk.m { background:#d29922; }
+.drisk.l { background:#3fb950; }
+
+/* ── Footer ──────────────────────────────── */
+.ftr  { display:flex; justify-content:space-between; align-items:center;
+        border-top:2px solid #0a1628; margin-top:4mm; padding-top:3mm; }
+.uni  { font-size:13pt; font-weight:900; color:#0a1628; }
+.uni span { color:#c8000a; }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="hdr">
+  <div class="tag">CS7080 &nbsp;|&nbsp; Cloud Computing and Internet of Things</div>
+  <h1>IoT-Enabled Urban Flood Early Warning and Alert System</h1>
+  <div class="auth"><span>Heshan Siriwardana  &nbsp;|&nbsp; 25024565</span></div>
+  <div class="auth"><span>Sampath Somathilake &nbsp;|&nbsp; 25024569</span></div>
+  <div class="auth"><span>Mohammedh Muksith   &nbsp;|&nbsp; 25024576</span></div>
+  <div class="auth"><span>Nishad Mohamed      &nbsp;|&nbsp; 25024582</span></div>
+</div>
+
+<!-- GRID -->
+<div class="grid">
+
+<!-- ════════ COL 1 ════════ -->
+<div style="display:flex;flex-direction:column;gap:3.5mm">
+
+  <div class="card">
+    <h2>Introduction</h2>
+    <!-- Mini system icons banner -->
+    <svg viewBox="0 0 380 36" style="width:100%;margin-bottom:5px" xmlns="http://www.w3.org/2000/svg">
+      <!-- ESP32 chip icon -->
+      <rect x="4" y="6" width="50" height="24" rx="3" fill="#1a3a2a" stroke="#22c55e" stroke-width="1.2"/>
+      <text x="29" y="16" text-anchor="middle" fill="#4ade80" font-size="7" font-weight="bold">ESP32</text>
+      <text x="29" y="25" text-anchor="middle" fill="#86efac" font-size="6">Wokwi</text>
+      <!-- arrow -->
+      <path d="M54,18 L68,18" stroke="#555" stroke-width="1.5" marker-end="url(#arr)"/>
+      <!-- Flask icon -->
+      <rect x="68" y="6" width="44" height="24" rx="3" fill="#1e3264" stroke="#60a5fa" stroke-width="1.2"/>
+      <text x="90" y="16" text-anchor="middle" fill="#93c5fd" font-size="7" font-weight="bold">Flask</text>
+      <text x="90" y="25" text-anchor="middle" fill="#bfdbfe" font-size="6">API</text>
+      <!-- arrow -->
+      <path d="M112,18 L126,18" stroke="#555" stroke-width="1.5" marker-end="url(#arr)"/>
+      <!-- Redis icon -->
+      <rect x="126" y="6" width="44" height="24" rx="3" fill="#7f1d1d" stroke="#f87171" stroke-width="1.2"/>
+      <text x="148" y="16" text-anchor="middle" fill="#fca5a5" font-size="7" font-weight="bold">Redis</text>
+      <text x="148" y="25" text-anchor="middle" fill="#fecaca" font-size="6">Cache</text>
+      <!-- arrow -->
+      <path d="M170,18 L184,18" stroke="#555" stroke-width="1.5" marker-end="url(#arr)"/>
+      <!-- Azure icon -->
+      <rect x="184" y="6" width="50" height="24" rx="3" fill="#1e3a5f" stroke="#3b82f6" stroke-width="1.2"/>
+      <text x="209" y="16" text-anchor="middle" fill="#93c5fd" font-size="7" font-weight="bold">Azure</text>
+      <text x="209" y="25" text-anchor="middle" fill="#bfdbfe" font-size="6">Cosmos+EHub</text>
+      <!-- arrow -->
+      <path d="M234,18 L248,18" stroke="#555" stroke-width="1.5" marker-end="url(#arr)"/>
+      <!-- React icon -->
+      <rect x="248" y="6" width="50" height="24" rx="3" fill="#064e3b" stroke="#34d399" stroke-width="1.2"/>
+      <text x="273" y="16" text-anchor="middle" fill="#6ee7b7" font-size="7" font-weight="bold">React</text>
+      <text x="273" y="25" text-anchor="middle" fill="#a7f3d0" font-size="6">Dashboard</text>
+      <!-- MQTT branch from arrow between ESP and Flask -->
+      <path d="M29,30 L29,35 L310,35 L310,30" stroke="#a78bfa" stroke-width="1" stroke-dasharray="3,2" fill="none"/>
+      <text x="170" y="35" text-anchor="middle" fill="#a78bfa" font-size="5.5">MQTT via HiveMQ</text>
+      <!-- arrow def -->
+      <defs>
+        <marker id="arr" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+          <path d="M0,0 L6,3 L0,6 Z" fill="#555"/>
+        </marker>
+      </defs>
+    </svg>
+    <p>The second coursework for <em>"Cloud Computing and Internet of Things"</em> requires a prototype utilising both IoT and Cloud. The system developed is an <strong>IoT-Enabled Urban Flood Early Warning and Alert System</strong>.</p>
+    <p>An ESP32 (simulated via Wokwi) collects water level, temperature, humidity, rain intensity, and soil moisture. Data flows to a Flask REST API over HTTP POST and MQTT, is cached in Redis locally, and optionally synced to Azure Cosmos DB and Event Hub for cloud analytics.</p>
+    <p>An offline-first architecture ensures zero data loss under intermittent cloud connectivity, with a background retry worker that drains the Redis queue when connectivity is restored. A React/Vite dashboard renders live readings and tri-level risk alerts.</p>
+  </div>
+
+  <div class="card">
+    <h2>Aims &amp; Objectives</h2>
+    <p>Deliver a resilient end-to-end flood early warning platform combining edge sensing, local-first persistence, and cloud analytics:</p>
+    <ul>
+      <li>Simulate ESP32 node (Wokwi) with ultrasonic, DHT22, rain and soil sensors.</li>
+      <li>Implement tri-level risk classification <span class="bl">LOW</span><span class="bm">MODERATE</span><span class="bh">HIGH</span> on-device.</li>
+      <li>Develop Flask REST API for HTTP POST ingestion and MQTT subscription.</li>
+      <li>Build offline-first store (in-memory + Redis) with cloud retry queue.</li>
+      <li>Integrate Azure Cosmos DB (persistent storage) and Event Hub (streaming).</li>
+      <li>Build React/Vite dashboard with sensor cards, time-filtered charts, alert log.</li>
+      <li>Provide PowerShell operational scripts for Redis startup and offline checks.</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h2>Components Used</h2>
+    <!-- Component icon grid -->
+    <svg viewBox="0 0 340 76" style="width:100%;margin-bottom:4px" xmlns="http://www.w3.org/2000/svg">
+      <!-- Row 1: hardware -->
+      <g transform="translate(4,2)">
+        <!-- ESP32 -->
+        <rect x="0" y="0" width="52" height="34" rx="3" fill="#1a3a2a" stroke="#22c55e" stroke-width="1.2"/>
+        <rect x="4" y="4" width="44" height="20" rx="2" fill="#0d2218"/>
+        <rect x="6" y="6" width="10" height="4" rx="1" fill="#1a3a2a" stroke="#4ade80" stroke-width=".5"/>
+        <rect x="18" y="6" width="10" height="4" rx="1" fill="#1a3a2a" stroke="#4ade80" stroke-width=".5"/>
+        <rect x="30" y="6" width="10" height="4" rx="1" fill="#1a3a2a" stroke="#4ade80" stroke-width=".5"/>
+        <text x="26" y="20" text-anchor="middle" fill="#4ade80" font-size="5.5" font-weight="bold">ESP32</text>
+        <text x="26" y="31" text-anchor="middle" fill="#86efac" font-size="5">DevKit V1</text>
+      </g>
+      <g transform="translate(62,2)">
+        <!-- HC-SR04 ultrasonic -->
+        <rect x="0" y="0" width="52" height="34" rx="3" fill="#374151" stroke="#9ca3af" stroke-width="1.2"/>
+        <circle cx="14" cy="14" r="7" fill="#4b5563" stroke="#9ca3af" stroke-width="1"/>
+        <circle cx="14" cy="14" r="4" fill="#1f2937"/>
+        <circle cx="30" cy="14" r="7" fill="#4b5563" stroke="#9ca3af" stroke-width="1"/>
+        <circle cx="30" cy="14" r="4" fill="#1f2937"/>
+        <text x="26" y="29" text-anchor="middle" fill="#d1d5db" font-size="5.5" font-weight="bold">HC-SR04</text>
+      </g>
+      <g transform="translate(120,2)">
+        <!-- DHT22 -->
+        <rect x="0" y="0" width="52" height="34" rx="3" fill="#1e3a5f" stroke="#60a5fa" stroke-width="1.2"/>
+        <rect x="10" y="4" width="32" height="16" rx="2" fill="#1e40af"/>
+        <text x="26" y="17" text-anchor="middle" fill="#dbeafe" font-size="6.5" font-weight="bold">DHT22</text>
+        <rect x="18" y="22" width="4" height="10" fill="#60a5fa"/>
+        <rect x="26" y="22" width="4" height="10" fill="#60a5fa"/>
+        <text x="26" y="32" text-anchor="middle" fill="#bfdbfe" font-size="5">Temp+Humid</text>
+      </g>
+      <g transform="translate(178,2)">
+        <!-- LCD1602 -->
+        <rect x="0" y="0" width="52" height="34" rx="3" fill="#1a3080" stroke="#3b82f6" stroke-width="1.2"/>
+        <rect x="4" y="5" width="44" height="8" rx="1" fill="#1e4080"/>
+        <rect x="4" y="15" width="44" height="8" rx="1" fill="#1e4080"/>
+        <text x="10" y="12" fill="#93c5fd" font-size="5">W:12cm R:HI</text>
+        <text x="10" y="22" fill="#93c5fd" font-size="5">T:36C H:97%</text>
+        <text x="26" y="32" text-anchor="middle" fill="#bfdbfe" font-size="5">LCD1602 I2C</text>
+      </g>
+      <g transform="translate(236,2)">
+        <!-- LEDs + Buzzer -->
+        <rect x="0" y="0" width="52" height="34" rx="3" fill="#111827" stroke="#6b7280" stroke-width="1.2"/>
+        <circle cx="12" cy="12" r="6" fill="#166534" stroke="#22c55e" stroke-width="1.2"/>
+        <circle cx="12" cy="12" r="3" fill="#4ade80" opacity=".9"/>
+        <circle cx="26" cy="12" r="6" fill="#78350f" stroke="#d97706" stroke-width="1.2"/>
+        <circle cx="26" cy="12" r="3" fill="#fbbf24" opacity=".9"/>
+        <circle cx="40" cy="12" r="6" fill="#7f1d1d" stroke="#ef4444" stroke-width="1.2"/>
+        <circle cx="40" cy="12" r="3" fill="#f87171" opacity=".9"/>
+        <ellipse cx="26" cy="25" rx="10" ry="7" fill="#374151" stroke="#9ca3af" stroke-width="1"/>
+        <ellipse cx="26" cy="24" rx="5" ry="3.5" fill="#1f2937"/>
+        <text x="26" y="34" text-anchor="middle" fill="#9ca3af" font-size="5">LEDs + Buzzer</text>
+      </g>
+      <!-- Row 2: software stack icons -->
+      <g transform="translate(4,40)">
+        <!-- Flask -->
+        <rect x="0" y="0" width="52" height="32" rx="3" fill="#1e3264" stroke="#60a5fa" stroke-width="1.2"/>
+        <text x="26" y="14" text-anchor="middle" fill="#93c5fd" font-size="7" font-weight="bold">Flask</text>
+        <text x="26" y="24" text-anchor="middle" fill="#bfdbfe" font-size="5">Python REST API</text>
+        <text x="26" y="30" text-anchor="middle" fill="#bfdbfe" font-size="5">+ MQTT Sub</text>
+      </g>
+      <g transform="translate(62,40)">
+        <!-- Redis -->
+        <rect x="0" y="0" width="52" height="32" rx="3" fill="#7f1d1d" stroke="#f87171" stroke-width="1.2"/>
+        <text x="26" y="14" text-anchor="middle" fill="#fca5a5" font-size="7" font-weight="bold">Redis</text>
+        <text x="26" y="24" text-anchor="middle" fill="#fecaca" font-size="5">Local Cache</text>
+        <text x="26" y="30" text-anchor="middle" fill="#fecaca" font-size="5">Retry Queue</text>
+      </g>
+      <g transform="translate(120,40)">
+        <!-- Cosmos DB -->
+        <rect x="0" y="0" width="52" height="32" rx="3" fill="#1e3a8a" stroke="#3b82f6" stroke-width="1.2"/>
+        <text x="26" y="12" text-anchor="middle" fill="#93c5fd" font-size="5.5" font-weight="bold">Azure</text>
+        <text x="26" y="21" text-anchor="middle" fill="#bfdbfe" font-size="5.5" font-weight="bold">Cosmos DB</text>
+        <text x="26" y="30" text-anchor="middle" fill="#bfdbfe" font-size="5">Cloud Storage</text>
+      </g>
+      <g transform="translate(178,40)">
+        <!-- Event Hub -->
+        <rect x="0" y="0" width="52" height="32" rx="3" fill="#1e3a8a" stroke="#60a5fa" stroke-width="1.2"/>
+        <text x="26" y="12" text-anchor="middle" fill="#93c5fd" font-size="5.5" font-weight="bold">Azure</text>
+        <text x="26" y="21" text-anchor="middle" fill="#bfdbfe" font-size="5.5" font-weight="bold">Event Hub</text>
+        <text x="26" y="30" text-anchor="middle" fill="#bfdbfe" font-size="5">Stream Analytics</text>
+      </g>
+      <g transform="translate(236,40)">
+        <!-- React -->
+        <rect x="0" y="0" width="52" height="32" rx="3" fill="#064e3b" stroke="#34d399" stroke-width="1.2"/>
+        <text x="26" y="14" text-anchor="middle" fill="#6ee7b7" font-size="7" font-weight="bold">React</text>
+        <text x="26" y="24" text-anchor="middle" fill="#a7f3d0" font-size="5">Vite Dashboard</text>
+        <text x="26" y="30" text-anchor="middle" fill="#a7f3d0" font-size="5">Live Monitoring</text>
+      </g>
+    </svg>
+  </div>
+
+</div>
+
+<!-- ════════ COL 2: Hardware Design ════════ -->
+<div style="display:flex;flex-direction:column;gap:3.5mm">
+  <div class="card" style="flex:1">
+    <h2>Hardware Design</h2>
+    <p>All modules are wired to the ESP32 GPIO pins as shown in the circuit diagram below.</p>
+
+    <!-- ═══ CIRCUIT DIAGRAM SVG ═══ -->
+    <svg viewBox="0 0 530 310" style="width:100%;margin:4px 0 6px" xmlns="http://www.w3.org/2000/svg">
+
+      <!-- Background -->
+      <rect width="530" height="310" fill="#f8fafc" rx="4"/>
+      <text x="265" y="12" text-anchor="middle" fill="#64748b" font-size="7" font-style="italic">Wokwi Simulated Circuit — ESP32 DevKit V1</text>
+
+      <!-- ── ESP32 BOARD ── -->
+      <rect x="192" y="55" width="134" height="200" rx="5" fill="#1a3a2a" stroke="#22c55e" stroke-width="2"/>
+      <!-- PCB texture -->
+      <rect x="204" y="67" width="110" height="176" rx="3" fill="#0d2218"/>
+      <!-- Chip -->
+      <rect x="224" y="105" width="70" height="50" rx="2" fill="#1a3a2a" stroke="#4ade80" stroke-width="1"/>
+      <text x="259" y="127" text-anchor="middle" fill="#4ade80" font-size="8" font-weight="bold">ESP32</text>
+      <text x="259" y="139" text-anchor="middle" fill="#86efac" font-size="6.5">DevKit V1</text>
+      <!-- USB port -->
+      <rect x="240" y="245" width="38" height="10" rx="2" fill="#374151" stroke="#9ca3af" stroke-width="1"/>
+      <text x="259" y="253" text-anchor="middle" fill="#9ca3af" font-size="5">USB</text>
+      <!-- Board label -->
+      <text x="259" y="90" text-anchor="middle" fill="#34d399" font-size="6">Wokwi Simulation</text>
+
+      <!-- LEFT SIDE PINS -->
+      <!-- D21 SDA -->
+      <circle cx="192" cy="82" r="3" fill="#e2e8f0" stroke="#64748b" stroke-width=".8"/>
+      <text x="190" y="80" text-anchor="end" fill="#94a3b8" font-size="6">D21</text>
+      <!-- D22 SCL -->
+      <circle cx="192" cy="97" r="3" fill="#e2e8f0" stroke="#64748b" stroke-width=".8"/>
+      <text x="190" y="95" text-anchor="end" fill="#94a3b8" font-size="6">D22</text>
+      <!-- D18 ECHO -->
+      <circle cx="192" cy="168" r="3" fill="#e2e8f0" stroke="#64748b" stroke-width=".8"/>
+      <text x="190" y="166" text-anchor="end" fill="#94a3b8" font-size="6">D18</text>
+      <!-- D5 TRIG -->
+      <circle cx="192" cy="183" r="3" fill="#e2e8f0" stroke="#64748b" stroke-width=".8"/>
+      <text x="190" y="181" text-anchor="end" fill="#94a3b8" font-size="6">D5</text>
+      <!-- D34 Rain -->
+      <circle cx="192" cy="198" r="3" fill="#e2e8f0" stroke="#64748b" stroke-width=".8"/>
+      <text x="190" y="196" text-anchor="end" fill="#94a3b8" font-size="6">D34</text>
+      <!-- D35 Soil -->
+      <circle cx="192" cy="213" r="3" fill="#e2e8f0" stroke="#64748b" stroke-width=".8"/>
+      <text x="190" y="211" text-anchor="end" fill="#94a3b8" font-size="6">D35</text>
+
+      <!-- RIGHT SIDE PINS -->
+      <!-- D4 DHT -->
+      <circle cx="326" cy="82" r="3" fill="#e2e8f0" stroke="#64748b" stroke-width=".8"/>
+      <text x="328" y="80" fill="#94a3b8" font-size="6">D4</text>
+      <!-- D26 Green -->
+      <circle cx="326" cy="155" r="3" fill="#e2e8f0" stroke="#64748b" stroke-width=".8"/>
+      <text x="328" y="153" fill="#94a3b8" font-size="6">D26</text>
+      <!-- D27 Yellow -->
+      <circle cx="326" cy="170" r="3" fill="#e2e8f0" stroke="#64748b" stroke-width=".8"/>
+      <text x="328" y="168" fill="#94a3b8" font-size="6">D27</text>
+      <!-- D14 Red -->
+      <circle cx="326" cy="185" r="3" fill="#e2e8f0" stroke="#64748b" stroke-width=".8"/>
+      <text x="328" y="183" fill="#94a3b8" font-size="6">D14</text>
+      <!-- D12 Buzzer -->
+      <circle cx="326" cy="200" r="3" fill="#e2e8f0" stroke="#64748b" stroke-width=".8"/>
+      <text x="328" y="198" fill="#94a3b8" font-size="6">D12</text>
+
+      <!-- ── COMPONENTS LEFT ── -->
+
+      <!-- LCD1602 -->
+      <rect x="10" y="68" width="96" height="40" rx="3" fill="#1a3080" stroke="#3b82f6" stroke-width="1.5"/>
+      <rect x="14" y="72" width="88" height="11" rx="1" fill="#1e4080"/>
+      <rect x="14" y="85" width="88" height="11" rx="1" fill="#1e4080"/>
+      <text x="18" y="80" fill="#7dd3fc" font-size="5.5">W:12cm R:HIGH</text>
+      <text x="18" y="93" fill="#7dd3fc" font-size="5.5">T:36.2C H:97%</text>
+      <text x="58" y="103" text-anchor="middle" fill="#93c5fd" font-size="6" font-weight="bold">LCD1602 (I2C)</text>
+
+      <!-- HC-SR04 -->
+      <rect x="10" y="152" width="96" height="42" rx="3" fill="#374151" stroke="#9ca3af" stroke-width="1.5"/>
+      <circle cx="32" cy="167" r="8" fill="#4b5563" stroke="#9ca3af" stroke-width="1"/>
+      <circle cx="32" cy="167" r="4.5" fill="#1f2937"/>
+      <circle cx="56" cy="167" r="8" fill="#4b5563" stroke="#9ca3af" stroke-width="1"/>
+      <circle cx="56" cy="167" r="4.5" fill="#1f2937"/>
+      <text x="58" y="185" text-anchor="middle" fill="#d1d5db" font-size="6" font-weight="bold">HC-SR04</text>
+      <text x="58" y="191" text-anchor="middle" fill="#9ca3af" font-size="5.5">Water Level</text>
+
+      <!-- Rain Potentiometer -->
+      <rect x="10" y="212" width="96" height="28" rx="3" fill="#78350f" stroke="#d97706" stroke-width="1.5"/>
+      <circle cx="34" cy="226" r="9" fill="#92400e" stroke="#fbbf24" stroke-width="1"/>
+      <line x1="34" y1="217" x2="34" y2="226" stroke="#fbbf24" stroke-width="1.5"/>
+      <text x="68" y="223" text-anchor="middle" fill="#fef3c7" font-size="6.5" font-weight="bold">Rain Sensor</text>
+      <text x="68" y="233" text-anchor="middle" fill="#d97706" font-size="5.5">Potentiometer D34</text>
+
+      <!-- Soil Potentiometer -->
+      <rect x="10" y="254" width="96" height="28" rx="3" fill="#166534" stroke="#22c55e" stroke-width="1.5"/>
+      <circle cx="34" cy="268" r="9" fill="#14532d" stroke="#4ade80" stroke-width="1"/>
+      <line x1="34" y1="259" x2="34" y2="268" stroke="#4ade80" stroke-width="1.5"/>
+      <text x="68" y="265" text-anchor="middle" fill="#dcfce7" font-size="6.5" font-weight="bold">Soil Moisture</text>
+      <text x="68" y="275" text-anchor="middle" fill="#22c55e" font-size="5.5">Potentiometer D35</text>
+
+      <!-- ── COMPONENTS RIGHT ── -->
+
+      <!-- DHT22 -->
+      <rect x="400" y="65" width="90" height="42" rx="3" fill="#1e3a5f" stroke="#3b82f6" stroke-width="1.5"/>
+      <rect x="408" y="70" width="74" height="24" rx="2" fill="#1e40af"/>
+      <text x="445" y="82" text-anchor="middle" fill="#dbeafe" font-size="8" font-weight="bold">DHT22</text>
+      <text x="445" y="93" text-anchor="middle" fill="#93c5fd" font-size="6">Temp + Humidity</text>
+      <rect x="424" y="96" width="5" height="10" fill="#3b82f6"/>
+      <rect x="433" y="96" width="5" height="10" fill="#3b82f6"/>
+      <rect x="442" y="96" width="5" height="10" fill="#3b82f6"/>
+      <rect x="451" y="96" width="5" height="10" fill="#3b82f6"/>
+
+      <!-- Green LED -->
+      <circle cx="418" cy="155" r="10" fill="#166534" stroke="#22c55e" stroke-width="1.5"/>
+      <circle cx="418" cy="155" r="5" fill="#4ade80" opacity=".85"/>
+      <text x="432" y="151" fill="#166534" font-size="6" font-weight="bold">GREEN</text>
+      <text x="432" y="159" fill="#166534" font-size="5.5">LOW RISK</text>
+      <!-- LED leads -->
+      <line x1="418" y1="145" x2="418" y2="140" stroke="#4ade80" stroke-width="1"/>
+      <line x1="412" y1="145" x2="412" y2="140" stroke="#94a3b8" stroke-width="1"/>
+
+      <!-- Yellow LED -->
+      <circle cx="418" cy="185" r="10" fill="#78350f" stroke="#d97706" stroke-width="1.5"/>
+      <circle cx="418" cy="185" r="5" fill="#fbbf24" opacity=".85"/>
+      <text x="432" y="181" fill="#78350f" font-size="6" font-weight="bold">YELLOW</text>
+      <text x="432" y="189" fill="#78350f" font-size="5.5">MODERATE</text>
+      <line x1="418" y1="175" x2="418" y2="170" stroke="#fbbf24" stroke-width="1"/>
+      <line x1="412" y1="175" x2="412" y2="170" stroke="#94a3b8" stroke-width="1"/>
+
+      <!-- Red LED -->
+      <circle cx="418" cy="215" r="10" fill="#7f1d1d" stroke="#ef4444" stroke-width="1.5"/>
+      <circle cx="418" cy="215" r="5" fill="#f87171" opacity=".85"/>
+      <text x="432" y="211" fill="#7f1d1d" font-size="6" font-weight="bold">RED</text>
+      <text x="432" y="219" fill="#7f1d1d" font-size="5.5">HIGH RISK</text>
+      <line x1="418" y1="205" x2="418" y2="200" stroke="#f87171" stroke-width="1"/>
+      <line x1="412" y1="205" x2="412" y2="200" stroke="#94a3b8" stroke-width="1"/>
+
+      <!-- Buzzer -->
+      <ellipse cx="418" cy="244" rx="14" ry="10" fill="#374151" stroke="#9ca3af" stroke-width="1.5"/>
+      <ellipse cx="418" cy="243" rx="7" ry="5" fill="#1f2937"/>
+      <text x="418" y="258" text-anchor="middle" fill="#9ca3af" font-size="5.5">BUZZER</text>
+      <text x="418" y="265" text-anchor="middle" fill="#6b7280" font-size="5">D12 – HIGH alarm</text>
+
+      <!-- ── WIRES ── -->
+
+      <!-- LCD → D21 SDA (teal) -->
+      <path d="M106,78 L142,78 L142,82 L192,82" fill="none" stroke="#06b6d4" stroke-width="1.5"/>
+      <!-- LCD → D22 SCL (light cyan) -->
+      <path d="M106,90 L146,90 L146,97 L192,97" fill="none" stroke="#67e8f9" stroke-width="1.5"/>
+
+      <!-- HC-SR04 → D18 ECHO (blue) -->
+      <path d="M106,163 L158,163 L158,168 L192,168" fill="none" stroke="#3b82f6" stroke-width="1.5"/>
+      <!-- HC-SR04 → D5 TRIG (light blue) -->
+      <path d="M106,175 L154,175 L154,183 L192,183" fill="none" stroke="#93c5fd" stroke-width="1.5"/>
+
+      <!-- Rain → D34 (amber) -->
+      <path d="M106,226 L170,226 L170,198 L192,198" fill="none" stroke="#fbbf24" stroke-width="1.5"/>
+
+      <!-- Soil → D35 (green) -->
+      <path d="M106,268 L176,268 L176,213 L192,213" fill="none" stroke="#4ade80" stroke-width="1.5"/>
+
+      <!-- DHT22 → D4 (orange) -->
+      <path d="M400,82 L365,82 L365,82 L326,82" fill="none" stroke="#f97316" stroke-width="1.5"/>
+
+      <!-- Green LED → D26 (green) -->
+      <path d="M408,155 L370,155 L370,155 L326,155" fill="none" stroke="#22c55e" stroke-width="1.5"/>
+
+      <!-- Yellow LED → D27 (yellow) -->
+      <path d="M408,185 L374,185 L374,170 L326,170" fill="none" stroke="#fbbf24" stroke-width="1.5"/>
+
+      <!-- Red LED → D14 (red) -->
+      <path d="M408,215 L378,215 L378,185 L326,185" fill="none" stroke="#ef4444" stroke-width="1.5"/>
+
+      <!-- Buzzer → D12 (pink) -->
+      <path d="M404,244 L382,244 L382,200 L326,200" fill="none" stroke="#f9a8d4" stroke-width="1.5"/>
+
+      <!-- Power rails (dashed) -->
+      <line x1="10" y1="295" x2="520" y2="295" stroke="#dc2626" stroke-width=".8" stroke-dasharray="5,2"/>
+      <text x="14" y="293" fill="#dc2626" font-size="5.5">5V / 3.3V Rail</text>
+      <line x1="10" y1="304" x2="520" y2="304" stroke="#1e293b" stroke-width=".8" stroke-dasharray="5,2"/>
+      <text x="14" y="302" fill="#1e293b" font-size="5.5">GND Rail</text>
+
+      <!-- Wire legend box -->
+      <rect x="338" y="268" width="175" height="58" fill="#fff" rx="3" stroke="#e2e8f0" stroke-width="1"/>
+      <text x="425" y="278" text-anchor="middle" fill="#0a1628" font-size="6.5" font-weight="bold">Wire Colour Legend</text>
+      <line x1="344" y1="285" x2="360" y2="285" stroke="#06b6d4" stroke-width="2"/><text x="364" y="288" fill="#334155" font-size="6">I2C SDA/SCL</text>
+      <line x1="344" y1="294" x2="360" y2="294" stroke="#3b82f6" stroke-width="2"/><text x="364" y="297" fill="#334155" font-size="6">Ultrasonic TRIG/ECHO</text>
+      <line x1="344" y1="303" x2="360" y2="303" stroke="#fbbf24" stroke-width="2"/><text x="364" y="306" fill="#334155" font-size="6">Rain ADC (D34)</text>
+      <line x1="432" y1="285" x2="448" y2="285" stroke="#4ade80" stroke-width="2"/><text x="452" y="288" fill="#334155" font-size="6">Soil ADC (D35)</text>
+      <line x1="432" y1="294" x2="448" y2="294" stroke="#f97316" stroke-width="2"/><text x="452" y="297" fill="#334155" font-size="6">DHT22 Data</text>
+      <line x1="432" y1="303" x2="448" y2="303" stroke="#ef4444" stroke-width="2"/><text x="452" y="306" fill="#334155" font-size="6">LED / Buzzer</text>
+    </svg>
+
+    <h3>Risk Score Thresholds</h3>
+    <table class="pt">
+      <tr><th>Sensor</th><th>MODERATE</th><th>HIGH</th></tr>
+      <tr><td>Water (cm)</td><td>&lt; 30 cm</td><td>&lt; 15 cm</td></tr>
+      <tr><td>Rain ADC</td><td>&gt; 1500</td><td>&gt; 3000</td></tr>
+      <tr><td>Soil ADC</td><td>&gt; 1500</td><td>&gt; 3000</td></tr>
+      <tr><td>Temperature</td><td>—</td><td>&gt; 35 °C (+pts)</td></tr>
+      <tr><td>Humidity</td><td>&gt; 85% (+1 pt)</td><td>&gt; 95% (+2 pts)</td></tr>
+    </table>
+  </div>
+</div>
+
+<!-- ════════ COL 3: Construction + System Flow ════════ -->
+<div style="display:flex;flex-direction:column;gap:3.5mm">
+
+  <div class="card">
+    <h2>Hardware Construction</h2>
+    <!-- Wokwi Simulation Mockup SVG -->
+    <svg viewBox="0 0 340 180" style="width:100%;margin-bottom:4px" xmlns="http://www.w3.org/2000/svg">
+      <!-- Wokwi UI chrome -->
+      <rect width="340" height="180" fill="#1a1a2e" rx="5"/>
+      <!-- Title bar -->
+      <rect width="340" height="22" fill="#16213e" rx="5"/>
+      <rect y="10" width="340" height="12" fill="#16213e"/>
+      <circle cx="12" cy="11" r="4" fill="#f85149"/>
+      <circle cx="24" cy="11" r="4" fill="#d29922"/>
+      <circle cx="36" cy="11" r="4" fill="#3fb950"/>
+      <text x="170" y="15" text-anchor="middle" fill="#7d8590" font-size="7" font-weight="bold">Wokwi Simulation — IoT Flood Warning System</text>
+      <!-- simulation area -->
+      <rect x="5" y="26" width="330" height="150" fill="#0d1117" rx="2"/>
+      <!-- ESP32 mini -->
+      <rect x="120" y="55" width="60" height="95" rx="3" fill="#1a3a2a" stroke="#22c55e" stroke-width="1"/>
+      <rect x="126" y="63" width="48" height="70" rx="2" fill="#0d2218"/>
+      <text x="150" y="80" text-anchor="middle" fill="#4ade80" font-size="6" font-weight="bold">ESP32</text>
+      <!-- LCD -->
+      <rect x="12" y="35" width="70" height="26" rx="2" fill="#1a3080" stroke="#3b82f6" stroke-width="1"/>
+      <rect x="15" y="38" width="64" height="9" rx="1" fill="#1e4080"/>
+      <rect x="15" y="49" width="64" height="9" rx="1" fill="#1e4080"/>
+      <text x="18" y="45" fill="#7dd3fc" font-size="5">W: 12cm HIGH</text>
+      <text x="18" y="56" fill="#7dd3fc" font-size="5">T:36C H:97%</text>
+      <!-- HC-SR04 -->
+      <rect x="12" y="75" width="65" height="32" rx="2" fill="#374151" stroke="#9ca3af" stroke-width="1"/>
+      <circle cx="28" cy="88" r="7" fill="#4b5563" stroke="#9ca3af" stroke-width=".8"/>
+      <circle cx="28" cy="88" r="4" fill="#1f2937"/>
+      <circle cx="45" cy="88" r="7" fill="#4b5563" stroke="#9ca3af" stroke-width=".8"/>
+      <circle cx="45" cy="88" r="4" fill="#1f2937"/>
+      <text x="38" y="103" text-anchor="middle" fill="#d1d5db" font-size="5.5">HC-SR04</text>
+      <!-- LEDs glowing -->
+      <circle cx="230" cy="65" r="7" fill="#166534" stroke="#22c55e" stroke-width="1"/>
+      <circle cx="230" cy="65" r="3.5" fill="#4ade80"/>
+      <text x="241" y="68" fill="#4ade80" font-size="5">LOW</text>
+      <circle cx="230" cy="85" r="7" fill="#78350f" stroke="#d97706" stroke-width="1"/>
+      <circle cx="230" cy="85" r="3.5" fill="#fbbf24" opacity=".4"/>
+      <text x="241" y="88" fill="#9ca3af" font-size="5">MOD</text>
+      <circle cx="230" cy="105" r="7" fill="#7f1d1d" stroke="#ef4444" stroke-width="1.5"/>
+      <circle cx="230" cy="105" r="3.5" fill="#f87171"/>
+      <!-- glow effect for red LED -->
+      <circle cx="230" cy="105" r="10" fill="#f87171" opacity=".15"/>
+      <text x="241" y="108" fill="#f87171" font-size="5" font-weight="bold">HIGH !</text>
+      <!-- Buzzer active -->
+      <ellipse cx="230" cy="130" rx="10" ry="7" fill="#374151" stroke="#f9a8d4" stroke-width="1.2"/>
+      <ellipse cx="230" cy="129" rx="5" ry="3.5" fill="#1f2937"/>
+      <!-- buzzer sound waves -->
+      <path d="M244,125 Q250,129 244,133" fill="none" stroke="#f9a8d4" stroke-width="1" opacity=".8"/>
+      <path d="M248,122 Q257,129 248,136" fill="none" stroke="#f9a8d4" stroke-width="1" opacity=".5"/>
+      <text x="241" y="143" fill="#f9a8d4" font-size="5">BUZZ!</text>
+      <!-- Potentiometers -->
+      <circle cx="35" cy="135" r="10" fill="#78350f" stroke="#d97706" stroke-width="1"/>
+      <line x1="35" y1="125" x2="35" y2="135" stroke="#fbbf24" stroke-width="1.5"/>
+      <text x="35" y="152" text-anchor="middle" fill="#d97706" font-size="5">Rain</text>
+      <circle cx="72" cy="135" r="10" fill="#166534" stroke="#22c55e" stroke-width="1"/>
+      <line x1="72" y1="125" x2="72" y2="130" stroke="#4ade80" stroke-width="1.5"/>
+      <text x="72" y="152" text-anchor="middle" fill="#22c55e" font-size="5">Soil</text>
+      <!-- DHT22 -->
+      <rect x="260" y="42" width="52" height="30" rx="2" fill="#1e3a5f" stroke="#3b82f6" stroke-width="1"/>
+      <rect x="265" y="46" width="42" height="18" rx="1" fill="#1e40af"/>
+      <text x="286" y="57" text-anchor="middle" fill="#dbeafe" font-size="6.5" font-weight="bold">DHT22</text>
+      <!-- wires simplified -->
+      <line x1="82" y1="48" x2="120" y2="70" stroke="#06b6d4" stroke-width=".8" opacity=".7"/>
+      <line x1="77" y1="91" x2="120" y2="100" stroke="#3b82f6" stroke-width=".8" opacity=".7"/>
+      <line x1="45" y1="140" x2="120" y2="130" stroke="#fbbf24" stroke-width=".8" opacity=".7"/>
+      <line x1="72" y1="140" x2="120" y2="138" stroke="#4ade80" stroke-width=".8" opacity=".7"/>
+      <line x1="180" y1="65" x2="223" y2="65" stroke="#22c55e" stroke-width=".8" opacity=".7"/>
+      <line x1="180" y1="98" x2="223" y2="105" stroke="#ef4444" stroke-width=".8" opacity=".7"/>
+      <line x1="180" y1="80" x2="223" y2="130" stroke="#f9a8d4" stroke-width=".8" opacity=".7"/>
+      <line x1="180" y1="72" x2="260" y2="56" stroke="#f97316" stroke-width=".8" opacity=".7"/>
+      <!-- Serial monitor -->
+      <rect x="5" y="155" width="330" height="18" fill="#0d1117" rx="2" stroke="#30363d" stroke-width=".5"/>
+      <text x="10" y="166" fill="#3fb950" font-size="5.5" font-family="Consolas,monospace">▶ POST /api/sensor-data {"node_id":"node1","water_level_cm":12.4,"risk_level":"HIGH"} → 200 OK</text>
+    </svg>
+    <p style="font-size:7.5pt;color:#555;font-style:italic">↑ Wokwi simulation with HIGH risk active: red LED on, buzzer sounding, HTTP POST to Flask API confirmed.</p>
+    <p style="margin-top:3px;">All modules were wired per the Hardware Design pin table. The potentiometers simulate rain/soil sensors by varying the ADC voltage. The LCD updates in real time showing current readings and risk level.</p>
+  </div>
+
+  <div class="card" style="flex:1">
+    <h2>System Flow</h2>
+
+    <!-- ═══ ARCHITECTURE DIAGRAM SVG ═══ -->
+    <svg viewBox="0 0 330 260" style="width:100%" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="a2" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto">
+          <path d="M0,0 L7,3.5 L0,7 Z" fill="#64748b"/>
+        </marker>
+        <marker id="a3" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto">
+          <path d="M0,0 L7,3.5 L0,7 Z" fill="#a78bfa"/>
+        </marker>
+      </defs>
+
+      <!-- Layer 1: ESP32 Hardware -->
+      <rect x="2" y="2" width="326" height="42" rx="4" fill="#1a3a2a" stroke="#22c55e" stroke-width="1.5"/>
+      <text x="15" y="15" fill="#86efac" font-size="7" font-weight="bold">① HARDWARE LAYER — ESP32 (Wokwi Simulated)</text>
+      <rect x="8" y="19" width="50" height="20" rx="2" fill="#0d2218" stroke="#4ade80" stroke-width="1"/>
+      <text x="33" y="31" text-anchor="middle" fill="#4ade80" font-size="6">HC-SR04</text>
+      <rect x="63" y="19" width="44" height="20" rx="2" fill="#0d2218" stroke="#4ade80" stroke-width="1"/>
+      <text x="85" y="31" text-anchor="middle" fill="#4ade80" font-size="6">DHT22</text>
+      <rect x="112" y="19" width="40" height="20" rx="2" fill="#0d2218" stroke="#4ade80" stroke-width="1"/>
+      <text x="132" y="31" text-anchor="middle" fill="#4ade80" font-size="6">Rain</text>
+      <rect x="157" y="19" width="40" height="20" rx="2" fill="#0d2218" stroke="#4ade80" stroke-width="1"/>
+      <text x="177" y="31" text-anchor="middle" fill="#4ade80" font-size="6">Soil</text>
+      <rect x="202" y="19" width="40" height="20" rx="2" fill="#1a3a2a" stroke="#22c55e" stroke-width="1"/>
+      <text x="222" y="31" text-anchor="middle" fill="#86efac" font-size="6">LEDs+Buzz</text>
+      <rect x="247" y="19" width="40" height="20" rx="2" fill="#1a3080" stroke="#3b82f6" stroke-width="1"/>
+      <text x="267" y="31" text-anchor="middle" fill="#93c5fd" font-size="6">LCD1602</text>
+      <text x="297" y="31" text-anchor="middle" fill="#86efac" font-size="7">⚡ Risk</text>
+
+      <!-- Arrows down from Layer 1 -->
+      <line x1="110" y1="44" x2="110" y2="57" stroke="#64748b" stroke-width="1.5" marker-end="url(#a2)"/>
+      <text x="82" y="54" fill="#64748b" font-size="6">HTTP POST</text>
+      <line x1="220" y1="44" x2="220" y2="57" stroke="#a78bfa" stroke-width="1.5" stroke-dasharray="3,2" marker-end="url(#a3)"/>
+      <text x="225" y="54" fill="#a78bfa" font-size="6">MQTT PUB</text>
+
+      <!-- Layer 2: Transport -->
+      <rect x="2" y="58" width="326" height="30" rx="4" fill="#1e1b4b" stroke="#a78bfa" stroke-width="1.5"/>
+      <text x="15" y="70" fill="#c4b5fd" font-size="7" font-weight="bold">② TRANSPORT — HTTP + MQTT via HiveMQ Broker</text>
+      <text x="15" y="81" fill="#8b5cf6" font-size="6">POST /api/sensor-data &nbsp;|&nbsp; MQTT topic: flood/node1/data &nbsp;|&nbsp; MQTT topic: flood/alerts/local</text>
+
+      <!-- Arrow down -->
+      <line x1="165" y1="88" x2="165" y2="101" stroke="#64748b" stroke-width="1.5" marker-end="url(#a2)"/>
+
+      <!-- Layer 3: Flask API -->
+      <rect x="2" y="102" width="326" height="38" rx="4" fill="#1e3264" stroke="#3b82f6" stroke-width="1.5"/>
+      <text x="15" y="115" fill="#93c5fd" font-size="7" font-weight="bold">③ FLASK API LAYER (Python — port 5000)</text>
+      <rect x="8" y="119" width="64" height="16" rx="2" fill="#1e40af" stroke="#60a5fa" stroke-width=".8"/>
+      <text x="40" y="129" text-anchor="middle" fill="#dbeafe" font-size="5.5">REST /api/*</text>
+      <rect x="76" y="119" width="60" height="16" rx="2" fill="#1e40af" stroke="#60a5fa" stroke-width=".8"/>
+      <text x="106" y="129" text-anchor="middle" fill="#dbeafe" font-size="5.5">MQTT Subscriber</text>
+      <rect x="140" y="119" width="58" height="16" rx="2" fill="#1e40af" stroke="#60a5fa" stroke-width=".8"/>
+      <text x="169" y="129" text-anchor="middle" fill="#dbeafe" font-size="5.5">Validate + Store</text>
+      <rect x="202" y="119" width="60" height="16" rx="2" fill="#1e40af" stroke="#60a5fa" stroke-width=".8"/>
+      <text x="232" y="129" text-anchor="middle" fill="#dbeafe" font-size="5.5">Alert Generator</text>
+      <rect x="266" y="119" width="58" height="16" rx="2" fill="#1e40af" stroke="#60a5fa" stroke-width=".8"/>
+      <text x="295" y="129" text-anchor="middle" fill="#dbeafe" font-size="5.5">Cloud Sync</text>
+
+      <!-- Arrows from layer 3 down split -->
+      <line x1="80" y1="140" x2="60" y2="153" stroke="#64748b" stroke-width="1.5" marker-end="url(#a2)"/>
+      <line x1="250" y1="140" x2="270" y2="153" stroke="#64748b" stroke-width="1.5" marker-end="url(#a2)"/>
+
+      <!-- Layer 4a: Redis -->
+      <rect x="2" y="154" width="140" height="34" rx="4" fill="#7f1d1d" stroke="#f87171" stroke-width="1.5"/>
+      <text x="15" y="166" fill="#fca5a5" font-size="7" font-weight="bold">④a REDIS (Local)</text>
+      <text x="15" y="176" fill="#fecaca" font-size="6">flood:readings &nbsp; flood:alerts</text>
+      <text x="15" y="184" fill="#fecaca" font-size="6">flood:sync:readings (retry queue)</text>
+
+      <!-- Layer 4b: Azure -->
+      <rect x="188" y="154" width="140" height="34" rx="4" fill="#1e3a8a" stroke="#3b82f6" stroke-width="1.5"/>
+      <text x="200" y="166" fill="#93c5fd" font-size="7" font-weight="bold">④b AZURE CLOUD</text>
+      <text x="200" y="176" fill="#bfdbfe" font-size="6">Cosmos DB — FloodWarningDB</text>
+      <text x="200" y="184" fill="#bfdbfe" font-size="6">Event Hub — flood-events</text>
+
+      <!-- Retry arrow Redis → Azure -->
+      <path d="M142,171 Q165,171 188,171" fill="none" stroke="#d29922" stroke-width="1.2" stroke-dasharray="4,2" marker-end="url(#a2)"/>
+      <text x="165" y="168" text-anchor="middle" fill="#d29922" font-size="5.5">retry</text>
+
+      <!-- Arrow down to dashboard -->
+      <line x1="165" y1="188" x2="165" y2="201" stroke="#64748b" stroke-width="1.5" marker-end="url(#a2)"/>
+
+      <!-- Layer 5: Dashboard -->
+      <rect x="2" y="202" width="326" height="38" rx="4" fill="#064e3b" stroke="#34d399" stroke-width="1.5"/>
+      <text x="15" y="214" fill="#6ee7b7" font-size="7" font-weight="bold">⑤ REACT DASHBOARD (Vite — port 3000)</text>
+      <rect x="8" y="218" width="56" height="16" rx="2" fill="#065f46" stroke="#34d399" stroke-width=".8"/>
+      <text x="36" y="228" text-anchor="middle" fill="#a7f3d0" font-size="5.5">SensorCard</text>
+      <rect x="68" y="218" width="56" height="16" rx="2" fill="#065f46" stroke="#34d399" stroke-width=".8"/>
+      <text x="96" y="228" text-anchor="middle" fill="#a7f3d0" font-size="5.5">RiskIndicator</text>
+      <rect x="128" y="218" width="56" height="16" rx="2" fill="#065f46" stroke="#34d399" stroke-width=".8"/>
+      <text x="156" y="228" text-anchor="middle" fill="#a7f3d0" font-size="5.5">SensorChart</text>
+      <rect x="188" y="218" width="56" height="16" rx="2" fill="#065f46" stroke="#34d399" stroke-width=".8"/>
+      <text x="216" y="228" text-anchor="middle" fill="#a7f3d0" font-size="5.5">AlertList</text>
+      <rect x="248" y="218" width="72" height="16" rx="2" fill="#065f46" stroke="#34d399" stroke-width=".8"/>
+      <text x="284" y="228" text-anchor="middle" fill="#a7f3d0" font-size="5.5">TimeFilter + Status</text>
+      <text x="165" y="236" text-anchor="middle" fill="#34d399" font-size="5.5">Polls GET /api/* every 5 s</text>
+    </svg>
+  </div>
+
+</div>
+
+<!-- ════════ COL 4: Software Design ════════ -->
+<div style="display:flex;flex-direction:column;gap:3.5mm">
+  <div class="card" style="flex:1">
+    <h2>Software Design &amp; Development</h2>
+    <p>Three software tiers work together: ESP32 firmware, Flask backend, and React frontend.</p>
+
+    <h3>① ESP32 Firmware (C++ / Arduino)</h3>
+    <ul>
+      <li><strong>measureWaterLevel()</strong> — triggers HC-SR04, converts pulse to cm distance.</li>
+      <li><strong>readDHT()</strong> — reads temperature (°C) and humidity (%) from DHT22.</li>
+      <li><strong>readADC(pin)</strong> — reads 12-bit value from rain/soil potentiometer pins.</li>
+      <li><strong>computeRisk()</strong> — weighted multi-sensor scoring → LOW / MODERATE / HIGH.</li>
+      <li><strong>updateIndicators(risk)</strong> — drives LED pins, buzzer, and LCD1602 over I2C.</li>
+      <li><strong>postToFlask(payload)</strong> — serialises JSON and HTTP POSTs to Flask API.</li>
+      <li><strong>publishMQTT(payload)</strong> — publishes sensor JSON to <code>flood/node1/data</code>.</li>
+      <li><strong>reconnectMQTT()</strong> — auto-reconnect loop for HiveMQ broker.</li>
+    </ul>
+    <hr/>
+    <h3>② Flask REST API (Python)</h3>
+    <ul>
+      <li><strong>ingest_sensor_data()</strong> — validates 7-field payload, stores locally, syncs cloud, auto-generates MODERATE/HIGH alerts.</li>
+      <li><strong>get_latest()</strong> — returns most recent reading from in-memory store.</li>
+      <li><strong>get_alerts()</strong> — returns alert log; supports <code>?limit=</code> query param.</li>
+      <li><strong>get_status()</strong> — returns system health: Redis state, cloud targets, queue depth.</li>
+      <li><strong>start_mqtt_client()</strong> — background thread subscribing to HiveMQ broker.</li>
+      <li><strong>sync_reading_to_cloud()</strong> — writes to Cosmos DB + Event Hub; returns bool.</li>
+      <li><strong>start_sync_worker()</strong> — drains Redis retry queue on cloud reconnect.</li>
+      <li><strong>offline_store.enqueue_sync_reading()</strong> — queues failed syncs to Redis.</li>
+    </ul>
+    <hr/>
+    <h3>③ React Dashboard (JavaScript / Vite)</h3>
+    <ul>
+      <li><strong>useSensorData(filterKey)</strong> — polls <code>/api/*</code> every 5 s; manages state for latest, history, alerts, status.</li>
+      <li><strong>SensorCard</strong> — colour-coded metric tiles (water level, temp, humidity, rain).</li>
+      <li><strong>RiskIndicator</strong> — animated badge; pulses at HIGH risk.</li>
+      <li><strong>SensorChart</strong> — Recharts line chart of history with time-window filter.</li>
+      <li><strong>AlertList</strong> — scrollable MODERATE/HIGH alert log with timestamps.</li>
+      <li><strong>TimeFilter</strong> — Live / 1 h / 6 h / 24 h history views.</li>
+    </ul>
+    <hr/>
+    <h3>④ Azure Cloud Integration</h3>
+    <ul>
+      <li><strong>azure_cosmos_client.py</strong> — upserts to <code>FloodWarningDB/SensorReadings</code>; range queries by timestamp.</li>
+      <li><strong>azure_eventhub_client.py</strong> — batches and publishes to <code>flood-events</code> Event Hub.</li>
+      <li><strong>cloud_sync.py</strong> — orchestrates dual-target sync; composite success flag.</li>
+      <li><strong>config.py</strong> — all tuneable thresholds, Redis keys, Azure endpoints via <code>.env</code>.</li>
+    </ul>
+    <hr/>
+    <h3>⑤ Offline Resilience Scripts</h3>
+    <ul>
+      <li><strong>start-redis.ps1</strong> — pulls and starts Docker Redis container automatically.</li>
+      <li><strong>offline-check.ps1</strong> — verifies Redis reachability, API health, and cloud sync status.</li>
+      <li><strong>OFFLINE_RUNBOOK.md</strong> — step-by-step guide for fully air-gapped local operation.</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ════════ COL 5: Dashboard + Conclusion ════════ -->
+<div style="display:flex;flex-direction:column;gap:3.5mm">
+
+  <div class="card">
+    <h2>React Dashboard</h2>
+    <p>The dashboard polls the Flask API every 5 s, renders live sensor cards, a tri-level risk badge, time-filtered history charts, and a scrollable alert log.</p>
+
+    <!-- Dashboard mockup -->
+    <div class="dmock">
+      <div class="dtitle">&#9632; Flood Warning System &nbsp;·&nbsp; Node: flood/node1 &nbsp;·&nbsp; ● LIVE</div>
+      <div class="drow">
+        <div class="dc"><div class="lbl">Water Level</div><div class="val r">12.4 cm</div><div class="lbl">↑ High Zone</div></div>
+        <div class="dc"><div class="lbl">Temperature</div><div class="val a">36.2 °C</div><div class="lbl">Above threshold</div></div>
+        <div class="dc"><div class="lbl">Humidity</div><div class="val b">97 %</div><div class="lbl">Saturated</div></div>
+      </div>
+      <div class="drow">
+        <div class="dc"><div class="lbl">Rain Intensity</div><div class="val r">3240 ADC</div><div class="lbl">Heavy Rain</div></div>
+        <div class="dc"><div class="lbl">Soil Moisture</div><div class="val a">2850 ADC</div><div class="lbl">Near-saturated</div></div>
+        <div class="dc"><div class="lbl">Cloud Sync</div><div class="val g">✔ OK</div><div class="lbl">Cosmos+EHub</div></div>
+      </div>
+      <div class="drisk h">⚠ RISK LEVEL: HIGH — Immediate Flood Risk Detected</div>
+    </div>
+
+    <!-- Sensor time-series chart SVG -->
+    <svg viewBox="0 0 440 120" style="width:100%;margin-top:5px" xmlns="http://www.w3.org/2000/svg">
+      <rect width="440" height="120" fill="#0d1117" rx="4"/>
+      <text x="10" y="12" fill="#8b949e" font-size="6.5" font-weight="bold">Water Level (cm) over Time — Last 30 readings</text>
+
+      <!-- Chart area: x=34,y=16 to x=430,y=106 -->
+      <rect x="34" y="16" width="396" height="90" fill="#161b22" rx="2"/>
+
+      <!-- Y axis gridlines + labels -->
+      <!-- y=0cm → svg_y=106, y=50cm → svg_y=16, scale: (106-16)/50 = 1.8px/cm -->
+      <!-- 50cm → y=16 -->
+      <line x1="34" y1="16" x2="430" y2="16" stroke="#21262d" stroke-width=".5"/>
+      <text x="30" y="19" text-anchor="end" fill="#8b949e" font-size="5.5">50</text>
+      <!-- 40cm → y=34 -->
+      <line x1="34" y1="34" x2="430" y2="34" stroke="#21262d" stroke-width=".5"/>
+      <text x="30" y="37" text-anchor="end" fill="#8b949e" font-size="5.5">40</text>
+      <!-- 30cm → y=52 (MODERATE threshold) -->
+      <line x1="34" y1="52" x2="430" y2="52" stroke="#d29922" stroke-width="1" stroke-dasharray="4,2"/>
+      <text x="30" y="55" text-anchor="end" fill="#d29922" font-size="5.5">30</text>
+      <!-- 20cm → y=70 -->
+      <line x1="34" y1="70" x2="430" y2="70" stroke="#21262d" stroke-width=".5"/>
+      <text x="30" y="73" text-anchor="end" fill="#8b949e" font-size="5.5">20</text>
+      <!-- 15cm → y=79 (HIGH threshold) -->
+      <line x1="34" y1="79" x2="430" y2="79" stroke="#f85149" stroke-width="1" stroke-dasharray="4,2"/>
+      <text x="30" y="82" text-anchor="end" fill="#f85149" font-size="5.5">15</text>
+      <!-- 10cm → y=88 -->
+      <line x1="34" y1="88" x2="430" y2="88" stroke="#21262d" stroke-width=".5"/>
+      <text x="30" y="91" text-anchor="end" fill="#8b949e" font-size="5.5">10</text>
+      <!-- 0cm → y=106 -->
+      <text x="30" y="109" text-anchor="end" fill="#8b949e" font-size="5.5">0</text>
+
+      <!-- Y axis label -->
+      <text x="6" y="65" text-anchor="middle" fill="#8b949e" font-size="5.5" transform="rotate(-90,6,65)">cm</text>
+
+      <!-- X axis -->
+      <line x1="34" y1="106" x2="430" y2="106" stroke="#30363d" stroke-width="1"/>
+      <text x="34" y="115" fill="#8b949e" font-size="5.5">0 min</text>
+      <text x="232" y="115" text-anchor="middle" fill="#8b949e" font-size="5.5">Time →</text>
+      <text x="430" y="115" text-anchor="end" fill="#8b949e" font-size="5.5">30 min</text>
+
+      <!-- Coloured fill zones -->
+      <!-- GREEN zone: above 30cm line (y<52) — area from line to top clipped -->
+      <!-- AMBER zone: 15-30cm (y=52 to 79) -->
+      <rect x="34" y="52" width="396" height="27" fill="#d29922" opacity=".06"/>
+      <!-- RED zone: below 15cm (y>79) -->
+      <rect x="34" y="79" width="396" height="27" fill="#f85149" opacity=".08"/>
+
+      <!-- Data line: water level readings (falling = rising water) -->
+      <!-- 30 points, x step = 396/29 = 13.65, svg_y = 106 - value*1.8 -->
+      <!-- Values: 46,44,42,40,38,36,34,32,30,28,26,24,22,20,18,16,14,13,12,11,10,10,11,12,13,15,18,22,26,30 -->
+      <!-- svg_y: 106-46*1.8=23.2, 106-44*1.8=26.8, 42→30.4, 40→34, 38→37.6, 36→41.2, 34→44.8,
+                  32→48.4, 30→52, 28→55.6, 26→59.2, 24→62.8, 22→66.4, 20→70, 18→73.6, 16→77.2,
+                  14→80.8, 13→82.6, 12→84.4, 11→86.2, 10→88, 10→88, 11→86.2, 12→84.4, 13→82.6,
+                  15→79, 18→73.6, 22→66.4, 26→59.2, 30→52 -->
+      <polyline
+        fill="none"
+        stroke="#58a6ff"
+        stroke-width="1.8"
+        stroke-linejoin="round"
+        points="
+          34,23.2
+          47.7,26.8
+          61.3,30.4
+          75,34
+          88.7,37.6
+          102.3,41.2
+          116,44.8
+          129.7,48.4
+          143.3,52
+          157,55.6
+          170.7,59.2
+          184.3,62.8
+          198,66.4
+          211.7,70
+          225.3,73.6
+          239,77.2
+          252.7,80.8
+          266.3,82.6
+          280,84.4
+          293.7,86.2
+          307.3,88
+          321,88
+          334.7,86.2
+          348.3,84.4
+          362,82.6
+          375.7,79
+          389.3,73.6
+          403,66.4
+          416.7,59.2
+          430,52
+        "
+      />
+
+      <!-- Dots at HIGH risk readings (y>79, value<15) -->
+      <circle cx="252.7" cy="80.8" r="3" fill="#f85149"/>
+      <circle cx="266.3" cy="82.6" r="3" fill="#f85149"/>
+      <circle cx="280" cy="84.4" r="3" fill="#f85149"/>
+      <circle cx="293.7" cy="86.2" r="3" fill="#f85149"/>
+      <circle cx="307.3" cy="88" r="3" fill="#f85149"/>
+      <circle cx="321" cy="88" r="3" fill="#f85149"/>
+      <circle cx="334.7" cy="86.2" r="3" fill="#f85149"/>
+      <circle cx="348.3" cy="84.4" r="3" fill="#f85149"/>
+      <circle cx="362" cy="82.6" r="3" fill="#f85149"/>
+      <!-- HIGH annotation -->
+      <rect x="254" y="68" width="58" height="10" rx="2" fill="#f85149" opacity=".85"/>
+      <text x="283" y="75.5" text-anchor="middle" fill="#fff" font-size="6" font-weight="bold">⚠ HIGH RISK</text>
+
+      <!-- MODERATE threshold label -->
+      <text x="432" y="55" fill="#d29922" font-size="5.5" font-weight="bold">MOD</text>
+      <!-- HIGH threshold label -->
+      <text x="432" y="82" fill="#f85149" font-size="5.5" font-weight="bold">HIGH</text>
+    </svg>
+
+    <p style="margin-top:2px;font-size:7pt;color:#555;font-style:italic">↑ Chart shows falling water distance = rising flood water. Red dots = HIGH risk readings.</p>
+
+    <p style="margin-top:4px;font-weight:600">Recent Alerts:</p>
+    <div class="ai hi">🔴 [node1] HIGH — Water: 12.4 cm | Rain: 3240 | 14:32:07 UTC</div>
+    <div class="ai hi">🔴 [node1] HIGH — Water: 10.0 cm | Soil: 3100 | 14:29:41 UTC</div>
+    <div class="ai">⚠️ [node1] MODERATE — Water: 22 cm | Rain: 1800 | 14:15:22 UTC</div>
+  </div>
+
+  <div class="card">
+    <h2>Conclusion</h2>
+    <p>This prototype successfully delivers a complete IoT-to-Cloud flood early warning pipeline — from simulated ESP32 edge sensing to real-time cloud analytics and a live React monitoring dashboard.</p>
+    <p>The <strong>offline-first architecture</strong> (Redis + retry worker) ensures zero data loss under intermittent connectivity — critical for emergency systems. Tri-level risk classification with local LED/buzzer actuation and remote dashboard alerts provides end-to-end flood monitoring applicable to real urban deployments.</p>
+    <p>The project deepened practical expertise in IoT firmware (C++/Arduino), RESTful API design (Python/Flask), cloud-integrated data pipelines (Azure Cosmos DB + Event Hub), and frontend real-time monitoring (React/Vite) — all core themes of the CS7080 module.</p>
+  </div>
+
+</div>
+</div><!-- /grid -->
+
+<!-- FOOTER -->
+<div class="ftr">
+  <div style="font-size:7.5pt;color:#555">MSc Artificial Intelligence &nbsp;|&nbsp; CS7080 Cloud Computing and Internet of Things &nbsp;|&nbsp; Assignment 2 &nbsp;|&nbsp; 2025–2026</div>
+  <div class="uni">LONDON <span>METROPOLITAN</span> UNIVERSITY</div>
+</div>
+
+</body>
+</html>

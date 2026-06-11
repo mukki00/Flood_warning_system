@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Flood Warning System Poster – CS7080</title>
+<style>
+  /* ── Page / Print Setup ───────────────────────────────────────────── */
+  @page {
+    size: A1 landscape;
+    margin: 10mm;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    font-size: 9.5pt;
+    background: #fff;
+    color: #111;
+    width: 821mm;      /* A1 landscape width */
+    min-height: 574mm;
+    padding: 6mm 8mm;
+  }
+
+  /* ── Header ───────────────────────────────────────────────────────── */
+  .poster-header {
+    text-align: center;
+    margin-bottom: 5mm;
+  }
+  .poster-header .module-tag {
+    font-size: 11pt;
+    font-weight: 600;
+    color: #444;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+  .poster-header h1 {
+    font-size: 18pt;
+    font-weight: 800;
+    color: #0a1628;
+    border: 2.5px solid #0a1628;
+    display: inline-block;
+    padding: 4px 20px;
+    margin: 4px 0;
+    letter-spacing: 0.5px;
+  }
+  .poster-header .authors {
+    font-size: 11pt;
+    font-weight: 700;
+    color: #c8000a;
+    margin-top: 3px;
+  }
+  .poster-header .authors span { margin: 0 16px; }
+
+  /* ── Main Grid ────────────────────────────────────────────────────── */
+  .grid {
+    display: grid;
+    grid-template-columns: 155mm 160mm 140mm 175mm 155mm;
+    grid-template-rows: auto auto;
+    gap: 4mm;
+    height: 100%;
+  }
+
+  /* ── Cards ────────────────────────────────────────────────────────── */
+  .card {
+    border: 1.5px solid #222;
+    padding: 5px 7px;
+    background: #fff;
+  }
+  .card h2 {
+    font-size: 10pt;
+    font-weight: 800;
+    text-align: center;
+    background: #0a1628;
+    color: #fff;
+    padding: 3px 0;
+    margin: -5px -7px 6px -7px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+  .card h3 {
+    font-size: 9pt;
+    font-weight: 700;
+    color: #0a1628;
+    margin: 7px 0 3px 0;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 2px;
+  }
+  .card p, .card li {
+    font-size: 8.5pt;
+    line-height: 1.45;
+    margin-bottom: 3px;
+  }
+  .card ul { padding-left: 14px; }
+  .card ul li { margin-bottom: 2px; }
+
+  /* ── Highlighted intro title ──────────────────────────────────────── */
+  .intro-title {
+    font-weight: 800;
+    font-style: italic;
+    color: #0a1628;
+  }
+
+  /* ── Pin table ────────────────────────────────────────────────────── */
+  .pin-table { width: 100%; border-collapse: collapse; margin-top: 4px; font-size: 8pt; }
+  .pin-table th { background:#0a1628; color:#fff; padding: 2px 4px; text-align: left; }
+  .pin-table td { padding: 2px 4px; border-bottom: 1px solid #ddd; }
+  .pin-table tr:nth-child(even) td { background: #f4f6fa; }
+
+  /* ── Flow diagram ─────────────────────────────────────────────────── */
+  .flow { display: flex; flex-direction: column; gap: 3px; }
+  .flow-row { display: flex; align-items: center; gap: 3px; }
+  .flow-box {
+    border: 1.5px solid #0a1628;
+    border-radius: 5px;
+    padding: 4px 6px;
+    font-size: 8pt;
+    font-weight: 600;
+    text-align: center;
+    background: #eef3fb;
+    flex: 1;
+  }
+  .flow-box.highlight { background: #0a1628; color: #fff; }
+  .flow-box.alert { background: #fef3cd; border-color: #d29922; }
+  .flow-box.cloud { background: #e8f4fd; border-color: #0078d4; }
+  .flow-box.redis { background: #fde8e8; border-color: #c8000a; }
+  .flow-arrow {
+    font-size: 11pt;
+    color: #555;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+  .flow-label {
+    font-size: 7.5pt;
+    color: #555;
+    text-align: center;
+    margin-top: 1px;
+  }
+  .flow-group { margin-top: 5px; }
+  .flow-group-title { font-size: 8pt; font-weight: 700; color: #0a1628; margin-bottom: 2px; }
+
+  /* ── Risk badge ───────────────────────────────────────────────────── */
+  .badge {
+    display: inline-block;
+    border-radius: 3px;
+    padding: 1px 6px;
+    font-size: 8pt;
+    font-weight: 700;
+    color: #fff;
+    margin-right: 4px;
+  }
+  .badge-low    { background: #28a745; }
+  .badge-mod    { background: #d29922; }
+  .badge-high   { background: #c8000a; }
+
+  /* ── Code block ───────────────────────────────────────────────────── */
+  .code-block {
+    background: #f4f6fa;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    font-family: 'Consolas', monospace;
+    font-size: 7.5pt;
+    padding: 4px 6px;
+    margin-top: 4px;
+    line-height: 1.5;
+  }
+  .code-block .kw { color: #0078d4; font-weight: 700; }
+  .code-block .fn { color: #6f42c1; }
+  .code-block .cm { color: #6a737d; font-style: italic; }
+
+  /* ── Divider ──────────────────────────────────────────────────────── */
+  .divider { border: none; border-top: 1px solid #ccc; margin: 5px 0; }
+
+  /* ── Dashboard mockup ─────────────────────────────────────────────── */
+  .dash-mockup {
+    background: #0d1117;
+    border-radius: 5px;
+    padding: 6px 8px;
+    color: #e6edf3;
+    font-size: 7.5pt;
+    font-family: 'Consolas', monospace;
+    margin-top: 5px;
+  }
+  .dash-mockup .dash-title { color: #58a6ff; font-weight: 700; font-size: 8pt; }
+  .dash-row { display: flex; gap: 5px; margin-top: 4px; }
+  .dash-card {
+    background: #161b22;
+    border: 1px solid #30363d;
+    border-radius: 4px;
+    padding: 5px 7px;
+    flex: 1;
+    text-align: center;
+  }
+  .dash-card .dc-label { color: #8b949e; font-size: 7pt; }
+  .dash-card .dc-value { color: #58a6ff; font-size: 9pt; font-weight: 700; margin: 2px 0; }
+  .dash-card .dc-value.red   { color: #f85149; }
+  .dash-card .dc-value.amber { color: #d29922; }
+  .dash-card .dc-value.green { color: #3fb950; }
+  .dash-risk {
+    margin-top: 4px;
+    border-radius: 4px;
+    padding: 3px 6px;
+    font-weight: 700;
+    text-align: center;
+    font-size: 8pt;
+    background: #3fb950;
+    color: #fff;
+  }
+  .dash-risk.high  { background: #f85149; }
+  .dash-risk.mod   { background: #d29922; }
+
+  /* ── Alert list ───────────────────────────────────────────────────── */
+  .alert-item {
+    background: #fff3cd;
+    border-left: 3px solid #d29922;
+    padding: 3px 5px;
+    margin-bottom: 3px;
+    font-size: 8pt;
+    border-radius: 0 3px 3px 0;
+  }
+  .alert-item.high { background: #f8d7da; border-color: #c8000a; }
+
+  /* ── Footer bar ───────────────────────────────────────────────────── */
+  .footer-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 2px solid #0a1628;
+    margin-top: 5mm;
+    padding-top: 3mm;
+  }
+  .footer-bar .uni {
+    font-size: 13pt;
+    font-weight: 900;
+    color: #0a1628;
+    letter-spacing: -0.5px;
+  }
+  .footer-bar .uni span { color: #c8000a; }
+
+  /* Column spans */
+  .span2 { grid-column: span 2; }
+
+</style>
+</head>
+<body>
+
+<!-- ══════════════ HEADER ══════════════ -->
+<div class="poster-header">
+  <div class="module-tag">CS7080 &nbsp;|&nbsp; Cloud Computing and Internet of Things</div>
+  <h1>IoT-Enabled Urban Flood Early Warning and Alert System</h1>
+  <div class="auth"><span>Heshan Siriwardana  &nbsp;|&nbsp; 25024565</span></div>
+  <div class="auth"><span>Sampath Somathilake &nbsp;|&nbsp; 25024569</span></div>
+  <div class="auth"><span>Mohammedh Muksith   &nbsp;|&nbsp; 25024576</span></div>
+  <div class="auth"><span>Nishad Mohamed      &nbsp;|&nbsp; 25024582</span></div>
+</div>
+
+<!-- ══════════════ GRID ══════════════ -->
+<div class="grid">
+
+  <!-- ── COL 1: Introduction + Aims ── -->
+  <div style="display:flex; flex-direction:column; gap:4mm;">
+
+    <div class="card">
+      <h2>Introduction</h2>
+      <p>
+        The requirement of the second coursework for the module <em>"Cloud Computing and Internet of Things"</em>
+        is the development and implementation of a prototype system utilising both IoT and Cloud Computing.
+        The prototype proposed and developed is an
+        <span class="intro-title">IoT-Enabled Urban Flood Early Warning and Alert System</span>.
+      </p>
+      <p>
+        The system uses a simulated ESP32 microcontroller (via Wokwi) equipped with multiple environmental
+        sensors to detect flood-risk conditions in real time. Sensor data is transmitted to a Flask API
+        backend over HTTP and MQTT, persisted locally with Redis, and optionally synchronised to
+        Azure Cosmos DB and Azure Event Hub for scalable cloud analytics.
+        A React dashboard provides live visualisation, history charts, and tri-level risk alerts.
+      </p>
+      <p>
+        The offline-first architecture ensures uninterrupted local operation even when cloud connectivity
+        is unavailable, with a background retry worker draining the Redis queue once connectivity is restored.
+      </p>
+    </div>
+
+    <div class="card">
+      <h2>Aims &amp; Objectives</h2>
+      <p>The main aim is to design, implement and demonstrate a resilient flood early warning platform
+         combining IoT sensing, edge processing, and cloud analytics. Objectives:</p>
+      <ul>
+        <li>Simulate an ESP32 sensor node (Wokwi) with ultrasonic, DHT22, rain and soil-moisture sensors.</li>
+        <li>Implement tri-level risk classification (<span class="badge badge-low">LOW</span><span class="badge badge-mod">MODERATE</span><span class="badge badge-high">HIGH</span>) on the device.</li>
+        <li>Develop a Flask REST API for sensor data ingestion via HTTP POST and MQTT subscription.</li>
+        <li>Build an offline-first local store (in-memory + Redis cache) with cloud retry queue.</li>
+        <li>Integrate Azure Cosmos DB for persistent cloud storage and Azure Event Hub for stream analytics.</li>
+        <li>Create a React/Vite dashboard with live sensor cards, time-filtered history charts, alert log, and system status.</li>
+        <li>Provide operational scripts for offline detection and zero-touch Redis startup.</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h2>Components Used</h2>
+      <ul>
+        <li><strong>ESP32 DevKit V1</strong> — simulated via Wokwi</li>
+        <li><strong>HC-SR04 Ultrasonic</strong> — water-level distance sensor</li>
+        <li><strong>DHT22</strong> — temperature &amp; humidity</li>
+        <li><strong>Potentiometer ×2</strong> — rain &amp; soil-moisture (simulated ADC)</li>
+        <li><strong>Green / Yellow / Red LEDs</strong> — visual risk indicator</li>
+        <li><strong>Buzzer</strong> — audible HIGH-risk alarm</li>
+        <li><strong>LCD1602 (I2C)</strong> — on-device status display</li>
+        <li><strong>Flask (Python)</strong> — REST API + MQTT subscriber</li>
+        <li><strong>Redis</strong> — local cache &amp; offline retry queue</li>
+        <li><strong>Azure Cosmos DB</strong> — cloud-persistent sensor store</li>
+        <li><strong>Azure Event Hub</strong> — streaming analytics pipeline</li>
+        <li><strong>React + Vite</strong> — monitoring dashboard</li>
+        <li><strong>HiveMQ Public Broker</strong> — MQTT pub/sub</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ── COL 2: Hardware Design ── -->
+  <div style="display:flex; flex-direction:column; gap:4mm;">
+
+    <div class="card" style="flex:1;">
+      <h2>Hardware Design</h2>
+      <p>All modules are wired to the ESP32 GPIO pins. The exact connections are as follows:</p>
+
+      <h3>HC-SR04 Ultrasonic (Water Level)</h3>
+      <table class="pin-table">
+        <tr><th>Pin</th><th>ESP32 GPIO</th></tr>
+        <tr><td>TRIG</td><td>D5 (GPIO 5)</td></tr>
+        <tr><td>ECHO</td><td>D18 (GPIO 18)</td></tr>
+        <tr><td>VCC / GND</td><td>5 V / GND</td></tr>
+      </table>
+
+      <h3>DHT22 (Temperature &amp; Humidity)</h3>
+      <table class="pin-table">
+        <tr><th>Pin</th><th>ESP32 GPIO</th></tr>
+        <tr><td>DATA</td><td>D4 (GPIO 4)</td></tr>
+        <tr><td>VCC / GND</td><td>3.3 V / GND</td></tr>
+      </table>
+
+      <h3>Potentiometers (Rain &amp; Soil Moisture)</h3>
+      <table class="pin-table">
+        <tr><th>Sensor</th><th>ADC Pin</th></tr>
+        <tr><td>Rain Sensor</td><td>D34 (ADC1_CH6)</td></tr>
+        <tr><td>Soil Moisture</td><td>D35 (ADC1_CH7)</td></tr>
+      </table>
+
+      <h3>Indicators &amp; Actuators</h3>
+      <table class="pin-table">
+        <tr><th>Component</th><th>GPIO</th><th>Purpose</th></tr>
+        <tr><td>Green LED</td><td>D26</td><td>LOW risk</td></tr>
+        <tr><td>Yellow LED</td><td>D27</td><td>MODERATE risk</td></tr>
+        <tr><td>Red LED</td><td>D14</td><td>HIGH risk</td></tr>
+        <tr><td>Buzzer</td><td>D12</td><td>Audible alarm (HIGH)</td></tr>
+      </table>
+
+      <h3>LCD1602 (I2C Display)</h3>
+      <table class="pin-table">
+        <tr><th>Pin</th><th>ESP32</th></tr>
+        <tr><td>SDA</td><td>D21 (GPIO 21)</td></tr>
+        <tr><td>SCL</td><td>D22 (GPIO 22)</td></tr>
+        <tr><td>VCC / GND</td><td>5 V / GND</td></tr>
+        <tr><td>I2C Address</td><td>0x27</td></tr>
+      </table>
+
+      <h3>Risk Thresholds</h3>
+      <table class="pin-table">
+        <tr><th>Sensor</th><th>Moderate</th><th>High</th></tr>
+        <tr><td>Water level (cm)</td><td>&lt; 30 cm</td><td>&lt; 15 cm</td></tr>
+        <tr><td>Rain ADC</td><td>&gt; 1500</td><td>&gt; 3000</td></tr>
+        <tr><td>Soil ADC</td><td>&gt; 1500</td><td>&gt; 3000</td></tr>
+        <tr><td>Temperature</td><td>—</td><td>&gt; 35 °C (+pts)</td></tr>
+        <tr><td>Humidity</td><td>&gt; 85 % (+1)</td><td>&gt; 95 % (+2)</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- ── COL 3: Hardware Construction + System Flow ── -->
+  <div style="display:flex; flex-direction:column; gap:4mm;">
+
+    <div class="card">
+      <h2>Hardware Construction</h2>
+      <p>
+        All modules are connected to the ESP32 DevKit V1 as described in the Hardware Design section.
+        The Wokwi simulation environment replicates real-world wiring without physical components.
+        The <strong>diagram.json</strong> file defines every component, wire, and attribute.
+      </p>
+      <p>
+        The LCD1602 displays the latest sensor readings and current risk level on two lines.
+        LEDs illuminate according to risk tier; the buzzer sounds a continuous tone at HIGH risk.
+      </p>
+      <p>LCD display states:</p>
+      <div class="dash-mockup">
+        <div>W:12cm R:H S:H &nbsp;&nbsp; — HIGH RISK, buzzer on, red LED</div>
+        <div>Temp:28C Hum:82% — MODERATE, yellow LED</div>
+        <div>W:45cm R:L S:L &nbsp;&nbsp; — LOW RISK, green LED</div>
+      </div>
+      <p style="margin-top:5px;">
+        The potentiometers are turned to simulate varying rainfall and soil saturation intensities,
+        triggering risk escalation in real time in the Wokwi live simulation.
+      </p>
+    </div>
+
+    <div class="card" style="flex:1;">
+      <h2>System Flow</h2>
+
+      <div class="flow-group">
+        <div class="flow-group-title">① Sensing &amp; Local Classification</div>
+        <div class="flow-row">
+          <div class="flow-box highlight">ESP32<br/>(Wokwi)</div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-box">Risk Score<br/>Calculation</div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-box">LED + Buzzer<br/>+ LCD Update</div>
+        </div>
+        <div class="flow-label">Sensors sampled every 5 s → weighted point total → LOW / MODERATE / HIGH</div>
+      </div>
+
+      <div class="flow-group">
+        <div class="flow-group-title">② Data Transmission</div>
+        <div class="flow-row">
+          <div class="flow-box highlight">ESP32</div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-box">HTTP POST<br/>/api/sensor-data</div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-box">Flask API<br/>(port 5000)</div>
+        </div>
+        <div class="flow-row" style="margin-top:3px;">
+          <div class="flow-box highlight">ESP32</div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-box">MQTT PUB<br/>flood/node1/data</div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-box">HiveMQ Broker<br/>→ Flask SUB</div>
+        </div>
+      </div>
+
+      <div class="flow-group">
+        <div class="flow-group-title">③ Storage &amp; Sync</div>
+        <div class="flow-row">
+          <div class="flow-box">Flask API</div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-box redis">In-memory<br/>+ Redis Cache</div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-box cloud">Azure Cosmos DB<br/>/ Event Hub</div>
+        </div>
+        <div class="flow-label">Offline: readings queued in Redis → retry worker syncs when cloud is reachable</div>
+      </div>
+
+      <div class="flow-group">
+        <div class="flow-group-title">④ Monitoring &amp; Alerts</div>
+        <div class="flow-row">
+          <div class="flow-box">Flask API<br/>/api/*</div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-box highlight">React<br/>Dashboard</div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-box alert">Alert Log<br/>+ Charts</div>
+        </div>
+        <div class="flow-label">Dashboard polls every 5 s; auto-generates alerts for MODERATE/HIGH readings</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── COL 4: Software Design ── -->
+  <div style="display:flex; flex-direction:column; gap:4mm;">
+
+    <div class="card" style="flex:1;">
+      <h2>Software Design &amp; Development</h2>
+      <p>
+        The software spans three tiers: the ESP32 firmware, the Flask API backend, and the React dashboard.
+        An offline-first design ensures data is never lost when cloud services are unreachable.
+      </p>
+
+      <h3>ESP32 Firmware (C++ / Arduino)</h3>
+      <ul>
+        <li><strong>measureWaterLevel()</strong> — triggers HC-SR04, converts pulse to cm distance.</li>
+        <li><strong>readDHT()</strong> — reads temperature (°C) and relative humidity (%) from DHT22.</li>
+        <li><strong>readADC(pin)</strong> — reads 12-bit ADC value from rain / soil potentiometers.</li>
+        <li><strong>computeRisk()</strong> — weighted scoring across all sensors; returns LOW / MODERATE / HIGH.</li>
+        <li><strong>updateIndicators(risk)</strong> — drives LED pins and buzzer; updates LCD1602 over I2C.</li>
+        <li><strong>postToFlask(payload)</strong> — serialises JSON and HTTP POSTs to Flask API endpoint.</li>
+        <li><strong>publishMQTT(payload)</strong> — publishes JSON to <code>flood/node1/data</code> topic via HiveMQ.</li>
+        <li><strong>reconnectMQTT()</strong> — ensures MQTT client stays connected with auto-reconnect loop.</li>
+      </ul>
+
+      <hr class="divider"/>
+
+      <h3>Flask REST API (Python)</h3>
+      <ul>
+        <li><strong>ingest_sensor_data()</strong> — validates POST payload (7 required fields), stores locally, triggers cloud sync, auto-generates MODERATE/HIGH alerts.</li>
+        <li><strong>get_latest()</strong> — returns most recent reading from in-memory store.</li>
+        <li><strong>get_alerts()</strong> — returns alert log; supports <code>?limit=</code> query param.</li>
+        <li><strong>get_status()</strong> — returns system health: online/offline, Redis state, cloud targets, reading counts.</li>
+        <li><strong>start_mqtt_client()</strong> — spawns background thread subscribing to HiveMQ broker.</li>
+        <li><strong>sync_reading_to_cloud()</strong> — writes to Cosmos DB and Event Hub; returns bool success.</li>
+        <li><strong>start_sync_worker()</strong> — background thread that drains Redis retry queue when cloud is reachable.</li>
+        <li><strong>offline_store.cache_reading()</strong> — pushes reading to Redis list; used as local buffer.</li>
+        <li><strong>offline_store.enqueue_sync_reading()</strong> — adds to Redis retry queue on cloud failure.</li>
+      </ul>
+
+      <hr class="divider"/>
+
+      <h3>React Dashboard (JavaScript / Vite)</h3>
+      <ul>
+        <li><strong>useSensorData(filterKey)</strong> — custom hook; polls <code>/api/*</code> every 5 s; manages latest, history, alerts, status state.</li>
+        <li><strong>SensorCard</strong> — displays a single metric (water level, temp, humidity, rain) with colour-coded threshold badges.</li>
+        <li><strong>RiskIndicator</strong> — renders tri-level risk badge with animated pulse for HIGH risk.</li>
+        <li><strong>SensorChart</strong> — line chart (Recharts) of historical readings with time-window filtering.</li>
+        <li><strong>AlertList</strong> — scrollable log of MODERATE/HIGH alerts with timestamps and node IDs.</li>
+        <li><strong>RainStatus</strong> — visual rain intensity indicator derived from raw ADC value.</li>
+        <li><strong>TimeFilter</strong> — toggles between Live, 1 h, 6 h, 24 h history views.</li>
+      </ul>
+
+      <hr class="divider"/>
+
+      <h3>Azure Cloud Integration</h3>
+      <ul>
+        <li><strong>azure_cosmos_client.py</strong> — upserts readings to <code>FloodWarningDB / SensorReadings</code> container; supports range queries by timestamp.</li>
+        <li><strong>azure_eventhub_client.py</strong> — batches and sends sensor events to Event Hub (<code>flood-events</code>) for downstream Stream Analytics.</li>
+        <li><strong>cloud_sync.py</strong> — orchestrates dual-target sync; returns composite success status.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ── COL 5: Dashboard + Conclusion ── -->
+  <div style="display:flex; flex-direction:column; gap:4mm;">
+
+    <div class="card">
+      <h2>React Dashboard</h2>
+      <p>The dashboard polls the Flask API every 5 seconds and renders live sensor data with colour-coded cards, a risk indicator, time-filtered line charts, and a scrollable alert log.</p>
+
+      <!-- Simulated dashboard mockup -->
+      <div class="dash-mockup">
+        <div class="dash-title">&#9632; Flood Warning System &nbsp; Node: flood/node1 &nbsp; ● Live</div>
+        <div class="dash-row">
+          <div class="dash-card">
+            <div class="dc-label">Water Level</div>
+            <div class="dc-value red">12 cm</div>
+            <div class="dc-label">↑ High Risk Zone</div>
+          </div>
+          <div class="dash-card">
+            <div class="dc-label">Temperature</div>
+            <div class="dc-value amber">36.2 °C</div>
+            <div class="dc-label">Above threshold</div>
+          </div>
+          <div class="dash-card">
+            <div class="dc-label">Humidity</div>
+            <div class="dc-value">97 %</div>
+            <div class="dc-label">Saturated</div>
+          </div>
+        </div>
+        <div class="dash-row">
+          <div class="dash-card">
+            <div class="dc-label">Rain Intensity</div>
+            <div class="dc-value red">3240 ADC</div>
+            <div class="dc-label">Heavy Rain</div>
+          </div>
+          <div class="dash-card">
+            <div class="dc-label">Soil Moisture</div>
+            <div class="dc-value amber">2850 ADC</div>
+            <div class="dc-label">Near Saturated</div>
+          </div>
+          <div class="dash-card">
+            <div class="dc-label">Cloud Sync</div>
+            <div class="dc-value green">OK</div>
+            <div class="dc-label">Cosmos + EHub</div>
+          </div>
+        </div>
+        <div class="dash-risk high">&#9888;  RISK LEVEL: HIGH — Immediate Action Required</div>
+      </div>
+
+      <p style="margin-top:5px;font-weight:600;">Alert Log (sample):</p>
+      <div class="alert-item high">🔴 [node1] HIGH — Water: 12 cm | Rain: 3240 | 14:32:07</div>
+      <div class="alert-item">⚠️ [node1] MODERATE — Water: 22 cm | Rain: 1800 | 14:27:51</div>
+      <div class="alert-item">⚠️ [node1] MODERATE — Soil: 1650 | Humidity: 88% | 14:15:22</div>
+    </div>
+
+    <div class="card">
+      <h2>Offline Resilience</h2>
+      <p>The system operates fully offline. When cloud services are unreachable:</p>
+      <ul>
+        <li>All readings are stored in-memory and cached to <strong>Redis</strong>.</li>
+        <li>Failed cloud syncs are enqueued to the <strong>Redis retry queue</strong> (<code>flood:sync:readings</code>).</li>
+        <li>A background <strong>sync worker</strong> retries every 5 seconds, draining the queue in batches of 50 when connectivity is restored.</li>
+        <li>PowerShell scripts (<code>offline-check.ps1</code>) verify Redis and API health; <code>start-redis.ps1</code> launches a Docker Redis container automatically.</li>
+        <li>The <code>GET /api/status</code> endpoint reports live sync targets, queue depth, and Redis availability.</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h2>Conclusion</h2>
+      <p>
+        The design and implementation of this prototype successfully demonstrates a complete IoT-to-Cloud pipeline
+        for urban flood early warning. The system integrates real-time multi-sensor data from a Wokwi-simulated
+        ESP32, a resilient Flask API with offline-first Redis storage, optional Azure Cosmos DB and Event Hub
+        cloud synchronisation, and an interactive React monitoring dashboard.
+      </p>
+      <p>
+        The offline-first architecture and background retry mechanism ensure zero data loss even under
+        intermittent cloud connectivity — a critical requirement for emergency systems.
+        The tri-level risk classification with local LED/buzzer actuation and remote dashboard alerts
+        provides an end-to-end flood monitoring solution applicable to real urban deployments.
+      </p>
+      <p>
+        This project has deepened practical expertise in IoT firmware development, RESTful API design,
+        cloud-integrated data pipelines, and frontend real-time monitoring — all core themes of the
+        CS7080 Cloud Computing and Internet of Things module.
+      </p>
+    </div>
+  </div>
+
+</div><!-- /grid -->
+
+<!-- ══════════════ FOOTER ══════════════ -->
+<div class="footer-bar">
+  <div style="font-size:8pt; color:#555;">
+    MSc Artificial Intelligence &nbsp;|&nbsp; CS7080 Cloud Computing and Internet of Things &nbsp;|&nbsp; Assignment 2
+  </div>
+  <div class="uni">LONDON <span>METROPOLITAN</span> UNIVERSITY</div>
+</div>
+
+</body>
+</html>
